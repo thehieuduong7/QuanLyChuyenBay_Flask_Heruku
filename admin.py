@@ -146,7 +146,6 @@ class NguoiDungModelView(AuthenticatedView):
             ('N', 'Nhân Viên Bán Vé'),
             ('K', 'Khách Hàng')
         ]}
-#Tuannguyen
 
 admin.add_view(KhachHangModelView(KhachHang, db.session, name = "KhachHang"))
 
