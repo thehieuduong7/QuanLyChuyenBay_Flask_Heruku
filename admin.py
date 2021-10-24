@@ -23,12 +23,13 @@ class DoanhThu(AuthenticatedView):
     @expose('/')
     def index(self):
         return self.render("admin/stats.html") 
-class QuyDinh(BaseView):
-    @expose('/')
-    def index(self):
-        return self.render("admin/rules.html")
-    def is_accessible(self):
-        return current_user.is_authenticated
+
+# class QuyDinh(BaseView):
+#     @expose('/')
+#     def index(self):
+#         return self.render("admin/rules.html")
+#       def is_accessible(self):
+#         return current_user.is_authenticated
         
 class KhachHangModelView(AuthenticatedView): 
     #can_create = False
@@ -87,6 +88,8 @@ class SanBayModelView(AuthenticatedView):
 
     column_labels = dict(TenSB = "Tên Sân Bay",
                         DiaChi = "Thành Phố")
+
+    column_descriptions = dict(TenSB = "Tuân theo quy định số lượng sân bay")
     can_set_page_size = True
     
 class ChuyenBayModelView(AuthenticatedView):
@@ -103,6 +106,8 @@ class ChuyenBayModelView(AuthenticatedView):
                         sanbay_di = "Sân Bay Đi",
                         sanbay_den = "Sân Bay Đến",
                         maybay = "Máy Bay")
+
+    column_descriptions = dict(ThoiGianBay = "Tuân theo quy định thời gian bay tối thiểu")
     can_set_page_size = True
 
 class TrungGianModelView(AuthenticatedView):
@@ -118,7 +123,10 @@ class TrungGianModelView(AuthenticatedView):
                         GhiChu = "Ghi Chú",
                         sanbay_trunggian = "Sân Bay Trung Gian",
                         chuyenbay = "Chuyến Bay")
+
+    column_descriptions = dict(ThoiGianDung = "Tuân theo quy định thời gian dừng tối thiểu/tối đa")
     can_set_page_size = True
+
 class VeModelView(AuthenticatedView):
     can_export = True
     can_view_details = True
@@ -130,6 +138,9 @@ class VeModelView(AuthenticatedView):
                         khachhang = "Tên Khách Hàng",
                         chuyenbay = "Chuyến Bay",
                         ThoiGianDatVe = "Thời Gian Đặt Vé")
+
+    column_descriptions = dict(ThoiGianDatVe = "Tuân theo quy định thời gian đặt vé tối thiểu")
+
     can_set_page_size = True
     
 class NguoiDungModelView(AuthenticatedView):
@@ -146,6 +157,32 @@ class NguoiDungModelView(AuthenticatedView):
             ('N', 'Nhân Viên Bán Vé'),
             ('K', 'Khách Hàng')
         ]}
+class QuyDinhModelView(AuthenticatedView):
+    can_export = True
+    column_searchable_list = ('QuyDinh', 'NoiDung')
+
+    column_labels = dict(QuyDinh = "Tên Quy Định",
+                        NoiDung = "Chi Tiết",
+                        GhiChu = "Ghi Chú",
+                        ThoiGianNhap = "Thời Gian Nhập")
+
+    column_descriptions = dict(Noidung = "Có thể là số, chữ,...",
+                        QuyDinh = "Mỗi quy định là duy nhất")
+    column_editable_list = ('NoiDung', 'GhiChu')
+
+    #quy định mặc định
+    column_choices = {
+        'QuyDinh':[
+            ('TGDatVeTreNhat', 'Thời Gian Đặt Vé Trễ Nhất'),
+            ('TGHuyVeTreNhat', 'Thời Gian Hủy Vé Trễ Nhất'), 
+            ('SoLuongSanBay', 'Số Lượng Sân Bay'), 
+            ('TGBayToiThieu', 'Thời Gian Bay Tối Thiểu'),
+            ('SanBayTGToiDa', 'Sân Bay Trung Gian Tối Đa'),
+            ('TGDungToiThieu', 'Thời Gian Dừng Tối Thiểu'), 
+            ('TGDungToiDa', 'Thời Gian Dừng Tối Đa')
+        ]
+    }
+    
         
 #first-commit
 admin.add_view(KhachHangModelView(KhachHang, db.session, name = "KhachHang"))
@@ -159,7 +196,7 @@ admin.add_view(NguoiDungModelView(NguoiDung, db.session, name ="Users"))
 
 admin.add_view(DoanhThu(DoanhThuThang, db.session, name = "DoanhThuThang"))
 admin.add_view(DoanhThu(DoanhThuNam, db.session, name = "DoanhThuNam"))
-admin.add_view(QuyDinh(name = "QuyDinh"))
+admin.add_view(QuyDinhModelView(QuyDinh, db.session, name = "QuyDinh"))
 admin.add_view(LogoutView(name = "DangXuat"))
 
 

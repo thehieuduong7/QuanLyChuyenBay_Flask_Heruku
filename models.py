@@ -115,20 +115,41 @@ class NguoiDung(db.Model, UserMixin):
 
     def __str__(self):
         return self.TenDN
-# class QuyDinh(db.Model):
-#     __tablename__ = 'QuyDinh'
-#     TGDatVeTreNhat = Column(Integer)
-#     TGHuyVeTreNhat = Column(Integer)
-#     SoLuongSanBay = Column(Integer)
-#     TGBayToiThieu = Column(Integer)
-#     SanBayTGToiDa = Column(Integer)
-#     TGDungToiThieu = Column(Integer)
-#     TGDungToiDa = Column(Integer)
+class QuyDinh(db.Model):
+    __tablename__ = 'QuyDinh'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    QuyDinh = Column(String(30), nullable=False, unique=True)
+    NoiDung = Column(String(100), nullable=False)
+    GhiChu = Column(String(100), nullable=True)
+    ThoiGianNhap = Column(DateTime, default = datetime.now(), nullable=False)
 
+    def __str__(self):
+            return self.QuyDinh
 if __name__ == '__main__':
     db.create_all()
 
+    #-------CHỈ CHẠY 1 LẦN--------
+    
+    #Các quy định mặc định 
+    # quydinh1 = QuyDinh(QuyDinh = "TGDatVeTreNhat", NoiDung = "1", GhiChu = "")
+    # quydinh2 = QuyDinh(QuyDinh = "TGHuyVeTreNhat", NoiDung = "1", GhiChu = "")
+    # quydinh3 = QuyDinh(QuyDinh = "SoLuongSanBay", NoiDung = "1", GhiChu = "")
+    # quydinh4 = QuyDinh(QuyDinh = "TGBayToiThieu", NoiDung = "1", GhiChu = "")
+    # quydinh5 = QuyDinh(QuyDinh = "SanBayTGToiDa", NoiDung = "1", GhiChu = "")
+    # quydinh6 = QuyDinh(QuyDinh = "TGDungToiThieu", NoiDung = "1", GhiChu = "")
+    # quydinh7 = QuyDinh(QuyDinh = "TGDungToiDa", NoiDung = "1", GhiChu = "")
+
+    #Admin mặc định
     # user = NguoiDung(TenDN = "admin", MatKhau = "123", VaiTro = "A", TenNguoiDung= "TuanNguyen")
+
+    # db.session.add(quydinh1)
+    # db.session.add(quydinh2)
+    # db.session.add(quydinh3)
+    # db.session.add(quydinh4)
+    # db.session.add(quydinh5)
+    # db.session.add(quydinh6)
+    # db.session.add(quydinh7)
+
     # db.session.add(user)
     # db.session.commit()
 
