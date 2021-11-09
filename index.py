@@ -21,5 +21,9 @@ def login_execute():
         login_user(user)
     return redirect("/admin")
 
+@app.route("/")
+def home():
+    return render_template("home.html")
+
 if __name__ == '__main__':
     app.run(debug=True)
