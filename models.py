@@ -90,7 +90,7 @@ class NguoiDung(db.Model, UserMixin):
     VaiTro = Column(String(1), nullable=False)
     TenNguoiDung = Column(String(30), nullable=False)
 
-    KhachHang = relationship("KhachHang", backref="nguoidung", lazy=True)
+    khachhang = relationship("KhachHang", backref="nguoidung", lazy=True)
 
     def __str__(self):
         return self.TenDN
