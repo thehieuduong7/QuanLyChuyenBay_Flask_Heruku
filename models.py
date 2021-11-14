@@ -4,24 +4,9 @@ from flask_login import UserMixin
 from sqlalchemy import (Boolean, Column, DateTime, Float, ForeignKey, Integer,
                         String, func, or_)
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql.expression import false
 
 from __init__ import db
-
-class KhachHang(db.Model):
-    __tablename__ = 'KhachHang'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    HoTenKH = Column(String(30), nullable=False)
-    GioiTinh = Column(String(3), default="Nam")
-    NamSinh = Column(Integer, nullable=False)
-    SDT = Column(String(10), nullable=False, unique=True)
-    CMND = Column(String(7), nullable=False, unique=True)
-    HinhAnh = Column(String(100), nullable = True)
-    Email = Column(String(100), nullable = False)
-
-    ve = relationship("Ve", backref="khachhang", lazy = True)
-
-    def __str__(self):
-        return self.HoTenKH
 
 class SanBay(db.Model):
     __tablename__ = 'SanBay'
@@ -70,14 +55,6 @@ class TrungGianChuyenBay(db.Model):
     ThoiGianDung = Column(Integer, default = 0)
     GhiChu = Column(String(100), nullable=True)
 
-class Ve(db.Model):
-    __tablename__ = 'Ve'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    Id_ChuyenBay = Column(Integer, ForeignKey(ChuyenBay.id, ondelete = "CASCADE"), nullable=False)
-    Id_KhachHang = Column(Integer, ForeignKey(KhachHang.id), nullable=False)
-    ThoiGianDatVe = Column(DateTime, default = datetime.now(), nullable=False)
-    HangVe = Column(String(10), default = "Thuong", nullable=False)
-
 class BangGiaVe(db.Model):
     __tablename__ = 'BangGiaVe'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -113,6 +90,8 @@ class NguoiDung(db.Model, UserMixin):
     VaiTro = Column(String(1), nullable=False)
     TenNguoiDung = Column(String(30), nullable=False)
 
+    KhachHang = relationship("KhachHang", backref="nguoidung", lazy=True)
+
     def __str__(self):
         return self.TenDN
 class QuyDinh(db.Model):
@@ -125,6 +104,32 @@ class QuyDinh(db.Model):
 
     def __str__(self):
             return self.QuyDinh
+
+class KhachHang(db.Model):
+    __tablename__ = 'KhachHang'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    HoTenKH = Column(String(30), nullable=False)
+    GioiTinh = Column(String(3), default="Nam")
+    NamSinh = Column(Integer, nullable=False)
+    SDT = Column(String(10), nullable=False, unique=True)
+    CMND = Column(String(7), nullable=False, unique=True)
+    HinhAnh = Column(String(100), nullable = True)
+    Email = Column(String(100), nullable = False)
+
+    id_nguoidung = Column(Integer, ForeignKey(NguoiDung.id), nullable=false)
+    ve = relationship("Ve", backref="khachhang", lazy = True)
+
+    def __str__(self):
+        return self.HoTenKH
+
+class Ve(db.Model):
+    __tablename__ = 'Ve'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    Id_ChuyenBay = Column(Integer, ForeignKey(ChuyenBay.id, ondelete = "CASCADE"), nullable=False)
+    Id_KhachHang = Column(Integer, ForeignKey(KhachHang.id), nullable=False)
+    ThoiGianDatVe = Column(DateTime, default = datetime.now(), nullable=False)
+    HangVe = Column(String(10), default = "Thuong", nullable=False)
+
 if __name__ == '__main__':
     db.create_all()
 
@@ -139,7 +144,7 @@ if __name__ == '__main__':
     # quydinh6 = QuyDinh(QuyDinh = "TGDungToiThieu", NoiDung = "1", GhiChu = "")
     # quydinh7 = QuyDinh(QuyDinh = "TGDungToiDa", NoiDung = "1", GhiChu = "")
 
-    #Admin mặc định
+    # #Admin mặc định
     # user = NguoiDung(TenDN = "admin", MatKhau = "123", VaiTro = "A", TenNguoiDung= "TuanNguyen")
 
     # db.session.add(quydinh1)
