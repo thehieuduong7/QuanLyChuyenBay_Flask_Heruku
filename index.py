@@ -10,6 +10,11 @@ import utils
 def user_load(user_id):
     return NguoiDung.query.get(user_id)
 
+@app.route("/")
+def home():
+    return render_template("home.html")
+
+
 @app.route("/login", methods=["POST"])
 def login_execute():
     username = request.form.get('username')
@@ -23,11 +28,7 @@ def login_execute():
             login_user(user)
     return redirect("/admin")
 
-@app.route("/")
-def home():
-    return render_template("home.html")
-
-@app.route("/login-user", methods = ["GET", "POST"])
+@app.route("/login-user", methods = ["POST", "GET"])
 def norlogin_user():
     if not current_user.is_authenticated:
         err_msg = ""
@@ -73,7 +74,10 @@ def normaluser_logout():
 
 #     return render_template("page-reg-page.html", err_msg = err_msg)
 
-
+@app.route("/list-ve")
+def list_ve():
+    if current_user.VaiTro == "N":
+        return render_template("list-ve.html")
 
 if __name__ == '__main__':
     app.run(debug=True)

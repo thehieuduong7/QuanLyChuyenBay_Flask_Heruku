@@ -4,14 +4,13 @@
   <div class="container">
   <ul class="breadcrumb">
       <li><a href="index.html">Home</a></li>
-      <li><a href="#">Blog</a></li>
-      <li class="active">Blog Page</li>
+      <li class="active">Chuyến Bay</li>
   </ul>
   <!-- BEGIN SIDEBAR & CONTENT -->
   <div class="row margin-bottom-40">
       <!-- BEGIN CONTENT -->
       <div class="col-md-12 col-sm-12">
-      <h1>Blog Page</h1>
+      <h1>Danh Sách Chuyến Bay</h1>
       <div class="content-page">
           <div class="row">
           <!-- BEGIN LEFT SIDEBAR -->            
@@ -44,6 +43,7 @@
                   </div>
                   <!-- END CAROUSEL -->             
               </div>
+
               <div class="col-md-8 col-sm-8">
                   <h2><a href="blog-item.html">Corrupti quos dolores etquas</a></h2>
                   <ul class="blog-info">
@@ -55,22 +55,7 @@
                   <a href="blog-item.html" class="more">Read more <i class="icon-angle-right"></i></a>
               </div>
               </div>
-              <hr class="blog-post-sep">
-              <div class="row">
-              <div class="col-md-4 col-sm-4">
-                  <img class="img-responsive" alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/works/img4.jpg') }}">
-              </div>
-              <div class="col-md-8 col-sm-8">
-                  <h2><a href="blog-item.html">Corrupti quos dolores etquas</a></h2>
-                  <ul class="blog-info">
-                  <li><i class="fa fa-calendar"></i> 25/07/2013</li>
-                  <li><i class="fa fa-comments"></i> 17</li>
-                  <li><i class="fa fa-tags"></i> Metronic, Keenthemes, UI Design</li>
-                  </ul>
-                  <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui sint blanditiis prae sentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non eleifend enim a feugiat. Pellentesque viverra vehicula sem ut volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing condimentum eleifend enim a feugiat.</p>
-                  <a href="blog-item.html" class="more">Read more <i class="icon-angle-right"></i></a>
-              </div>
-              </div>
+
               <hr class="blog-post-sep">
               <div class="row">
               <div class="col-md-4 col-sm-4">
@@ -89,6 +74,7 @@
                   <a href="blog-item.html" class="more">Read more <i class="fa fa-angle-right"></i></a>
               </div>
               </div>
+
               <hr class="blog-post-sep">
               <div class="row">
               <div class="col-md-4 col-sm-4">
@@ -105,6 +91,7 @@
                   <a href="blog-item.html" class="more">Read more <i class="fa fa-angle-right"></i></a>
               </div>
               </div>
+
               <hr class="blog-post-sep">
               <ul class="pagination">
               <li><a href="#">Prev</a></li>
@@ -132,7 +119,7 @@
               <!-- CATEGORIES END -->
 
               <!-- BEGIN RECENT NEWS -->                            
-              <h2>Recent News</h2>
+              <h2>Chuyến Bay Mới</h2>
               <div class="recent-news margin-bottom-10">
               <div class="row margin-bottom-10">
                   <div class="col-md-3">
@@ -143,24 +130,7 @@
                   <p>Decusamus tiusto odiodig nis simos ducimus qui sint</p>
                   </div>                        
               </div>
-              <div class="row margin-bottom-10">
-                  <div class="col-md-3">
-                  <img class="img-responsive" alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/people/img1-large.jpg') }}">                        
-                  </div>
-                  <div class="col-md-9 recent-news-inner">
-                  <h3><a href="#">Deiusto anissimos</a></h3>
-                  <p>Decusamus tiusto odiodig nis simos ducimus qui sint</p>
-                  </div>                        
-              </div>
-              <div class="row margin-bottom-10">
-                  <div class="col-md-3">
-                  <img class="img-responsive" alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/people/img3-large.jpg') }}">                        
-                  </div>
-                  <div class="col-md-9 recent-news-inner">
-                  <h3><a href="#">Tesiusto baissimos</a></h3>
-                  <p>Decusamus tiusto odiodig nis simos ducimus qui sint</p>
-                  </div>                        
-              </div>
+              
               </div>
               <!-- END RECENT NEWS -->                            
 
@@ -190,13 +160,6 @@
               <h2>Photos Stream</h2>
               <ul class="list-unstyled">
                   <li><a href="#"><img alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/people/img5-small.jpg') }}"></a></li>
-                  <li><a href="#"><img alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/works/img1.jp') }}"></a></li>
-                  <li><a href="#"><img alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/people/img4-large.jpg') }}"></a></li>
-                  <li><a href="#"><img alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/works/img6.jpg') }}"></a></li>
-                  <li><a href="#"><img alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/pics/img1-large.jpg') }}"></a></li>
-                  <li><a href="#"><img alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/pics/img2-large.jpg') }}"a></li>
-                  <li><a href="#"><img alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/works/img3.jpg') }}"></a></li>
-                  <li><a href="#"><img alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/people/img2-large.jpg') }}"></a></li>
               </ul>                    
               </div>
               <!-- END BLOG PHOTOS STREAM -->
@@ -206,13 +169,6 @@
               <h2>Tags</h2>
               <ul>
                   <li><a href="#"><i class="fa fa-tags"></i>OS</a></li>
-                  <li><a href="#"><i class="fa fa-tags"></i>Metronic</a></li>
-                  <li><a href="#"><i class="fa fa-tags"></i>Dell</a></li>
-                  <li><a href="#"><i class="fa fa-tags"></i>Conquer</a></li>
-                  <li><a href="#"><i class="fa fa-tags"></i>MS</a></li>
-                  <li><a href="#"><i class="fa fa-tags"></i>Google</a></li>
-                  <li><a href="#"><i class="fa fa-tags"></i>Keenthemes</a></li>
-                  <li><a href="#"><i class="fa fa-tags"></i>Twitter</a></li>
               </ul>
               </div>
               <!-- END BLOG TAGS -->
