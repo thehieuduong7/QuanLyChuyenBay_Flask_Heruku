@@ -116,7 +116,7 @@ class KhachHang(db.Model):
     HinhAnh = Column(String(100), nullable = True)
     Email = Column(String(100), nullable = False)
 
-    id_nguoidung = Column(Integer, ForeignKey(NguoiDung.id), nullable=false)
+    id_nguoidung = Column(Integer, ForeignKey(NguoiDung.id), nullable=True)
     ve = relationship("Ve", backref="khachhang", lazy = True)
 
     def __str__(self):
