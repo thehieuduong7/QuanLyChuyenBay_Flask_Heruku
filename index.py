@@ -1,8 +1,9 @@
 from flask import render_template, request, redirect, session, jsonify
 from __init__ import app, CART_KEY, my_login
 from admin import*
-from models import NguoiDung
+from models import*
 from flask_login import login_user
+import utils
 
 @my_login.user_loader
 #Bỏ cả đối tượng vào biến current_user
@@ -18,12 +19,61 @@ def login_execute():
     user = NguoiDung.query.filter(NguoiDung.TenDN==username, NguoiDung.MatKhau==password).first()
 
     if user:
-        login_user(user)
+        if user.VaiTro == "A":
+            login_user(user)
     return redirect("/admin")
 
 @app.route("/")
 def home():
     return render_template("home.html")
+
+@app.route("/login-user", methods = ["GET", "POST"])
+def norlogin_user():
+    if not current_user.is_authenticated:
+        err_msg = ""
+        if request.method == "POST":
+            username = request.form.get("username")
+            pwd = request.form.get("password")
+
+            user = NguoiDung.query.filter(NguoiDung.TenDN == username, NguoiDung.MatKhau == pwd).first()
+
+            if user:
+                login_user(user)
+                return redirect(request.args.get("next", "/"))
+            else:
+                err_msg = "Kiểm tra lại thông tin"
+
+        return render_template("login-user.html", err_msg=err_msg)
+    return redirect("/")
+    
+@app.route("/logout-user")
+def normaluser_logout():
+    logout_user()
+    return redirect("/login-user")
+
+# @app.route("/user-register", methods=["POST", "GET"])
+# def register():
+#     err_msg = ""
+#     if request.method == 'POST':
+#         try:
+#             password = request.form.get("password")    
+#             confirm_password = request.form.get("confirm-password")
+#             if password.strip() == confirm_password.strip():
+#                 data = request.form.copy()
+#                 del data['confirm-password']
+
+#                 if utils.add_user(**data):
+#                     return redirect("/user-login")
+#                 else:
+#                     err_msg = "Check your information again/Username might already exit"
+#             else:
+#                 err_msg = "Password not match"
+#         except:
+#             err_msg = "System error"
+
+#     return render_template("page-reg-page.html", err_msg = err_msg)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

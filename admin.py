@@ -10,7 +10,7 @@ from models import*
 #view chứng thực, quyền cho phép đăng nhập vào view
 class AuthenticatedView(ModelView):
     def is_accessible(self):
-        return current_user.is_authenticated
+        return current_user.is_authenticated and current_user.VaiTro == "A"
 
 class LogoutView(BaseView):
     @expose('/')
@@ -150,7 +150,8 @@ class NguoiDungModelView(AuthenticatedView):
     
     column_labels = dict(TenDN = "Tên Đăng Nhập",
                         VaiTro = "Vai Trò",
-                        TenNguoiDung = "Tên Người Dùng")
+                        TenNguoiDung = "Tên Người Dùng",
+                        MatKhau = "Mật Khẩu")
     column_choices = {
         'VaiTro': [
             ('A', 'Admin'),
