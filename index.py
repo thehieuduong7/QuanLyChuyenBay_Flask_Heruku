@@ -78,6 +78,18 @@ def normaluser_logout():
 def list_ve():
     if current_user.VaiTro == "N":
         return render_template("list-ve.html")
+@app.route("/ban-ve")
+def ban_ve():
+    if current_user.VaiTro == "N":
+        return render_template("banve.html")
+@app.route("/nhan-lich")
+def nhan_lich():
+    if current_user.VaiTro == "N":
+        return render_template("nhanlichchuyenbay.html")
+@app.route("/list-khach")
+def list_khach():
+    if current_user.VaiTro == "N":
+        return render_template("list-khachhang.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
