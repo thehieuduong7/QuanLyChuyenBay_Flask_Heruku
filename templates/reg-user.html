@@ -1,0 +1,85 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+<div class="main">
+  <div class="container">
+    <ul class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li class="active">Đăng Ký</li>
+    </ul>
+    <!-- BEGIN SIDEBAR & CONTENT -->
+    <div class="row margin-bottom-40">
+      <!-- BEGIN SIDEBAR -->
+      <div class="sidebar col-md-3 col-sm-3">
+        <ul class="list-group margin-bottom-25 sidebar-menu">
+          <li class="list-group-item clearfix"><a href="/login-user"><i class="fa fa-angle-right"></i> Đăng Nhập</a></li>
+        </ul>
+      </div>
+      <!-- END SIDEBAR -->
+
+      <!-- BEGIN CONTENT -->
+      <div class="col-md-9 col-sm-9">
+        <h1>Tạo một tài khoản</h1>
+        <div class="content-form-page">
+          <div class="row">
+            <div class="col-md-7 col-sm-7">
+              {% if err_msg %}
+              <div class = "alert alert-danger">
+                {{ err_msg }}
+              </div>
+              {% endif %}
+              <form class="form-horizontal" role="form" method="post">
+                <fieldset>
+                  <legend>Nhập thông tin</legend>
+                  <div class="form-group">
+                    <label for="firstname" class="col-lg-4 control-label">Tên Đăng Nhập: <span class="require">*</span></label>
+                    <div class="col-lg-8">
+                      <input type="text" class="form-control" id="tendangnhap" placeholder="Dùng để đăng nhập vào tài khoản" name="tendangnhap" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="lastname" class="col-lg-4 control-label">Tên Người Dùng: <span class="require">*</span></label>
+                    <div class="col-lg-8">
+                      <input type="text" class="form-control" id="tennguoidung" placeholder="Dùng để hiển thị" name="tennguoidung" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="email" class="col-lg-4 control-label">Mật Khẩu: <span class="require">*</span></label>
+                    <div class="col-lg-8">
+                      <input type="password" class="form-control" id="matkhau" placeholder="Chỉ nhập số" name="matkhau" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="email" class="col-lg-4 control-label">Xác Nhận: <span class="require">*</span></label>
+                    <div class="col-lg-8">
+                      <input type="password" class="form-control" id="confirmmatkhau" placeholder="Nhập lại mật khẩu" name="confirmmatkhau" required>
+                    </div>
+                  </div>
+                </fieldset>
+                <div class="row">
+                  <div class="col-lg-8 col-md-offset-4 padding-left-0 padding-top-20">                        
+                    <button type="submit" class="btn btn-primary">Tạo Tạo Khoản</button>
+                    <button type="reset" class="btn btn-default">Nhập Lại</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-4 col-sm-4 pull-right">
+              <div class="form-info">
+                <h2><em>Important</em> Information</h2>
+                <p>Duis autem vel eum iriure at dolor vulputate velit esse vel molestie at dolore.</p>
+
+                <button type="button" class="btn btn-default">More details</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END CONTENT -->
+    </div>
+    <!-- END SIDEBAR & CONTENT -->
+  </div>
+</div>
+{% endblock %}
+{% block footer %}
+{% endblock %}

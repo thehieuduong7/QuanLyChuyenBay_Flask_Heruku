@@ -13,7 +13,8 @@
             <table summary="Shopping cart">
               <tr>
                 <th class="goods-page-image">Hình ảnh</th>
-                <th class="goods-page-description">Thông Tin</th>
+                <th class="goods-page-description">Họ Tên</th>
+                <th class="goods-page-ref-no">Năm sinh</th>
                 <th class="goods-page-ref-no">Số điện thoại</th>
                 <th class="goods-page-ref-no">CMND</th>
                 <th class="goods-page-ref-no">Email</th>
@@ -24,23 +25,21 @@
                   <a href="#"><img src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/products/model3.jpg') }}" alt="Berry Lace Dress"></a>
                 </td>
                 <td class="goods-page-description">
-                  <h3><a href="#">Cool green dress with red bell</a></h3>
-                  <p><strong>Item 1</strong> - Color: Green; Size: S</p>
-                  <em>More info is here</em>
+                  <h3><a href="#">Họ Tên</a></h3>
+                  <p><strong>Giới tính</strong> Nam</p>
+              
                 </td>
                 <td class="goods-page-ref-no">
-                  javc2133
+                  <strong style = "font-size: large;">2001</strong>
                 </td>
                 <td class="goods-page-quantity">
-                  <div class="product-quantity">
-                      <input id="product-quantity" type="text" value="1" readonly class="form-control input-sm">
-                  </div>
+                  <strong style = "font-size: large;">123456789</strong>
                 </td>
                 <td class="goods-page-price">
-                  <strong><span>$</span>47.00</strong>
+                  <strong>123456789</strong>
                 </td>
                 <td class="goods-page-total">
-                  <strong><span>$</span>47.00</strong>
+                  <strong>myemail@gmail.com</strong>
                 </td>
                 <td class="del-goods-col">
                   <a class="del-goods" href="#">&nbsp;</a>
@@ -49,8 +48,18 @@
               
             </table>
             </div>
-
-            <div class="shopping-total">
+              
+            <hr class="blog-post-sep">
+              <ul class="pagination">
+              <li><a href="#">Prev</a></li>
+              <li><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li class="active"><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+              <li><a href="#">5</a></li>
+              <li><a href="#">Next</a></li>
+              </ul>     
+            <!-- <div class="shopping-total">
               <ul>
                 <li>
                   <em>Sub total</em>
@@ -68,7 +77,7 @@
             </div>
           </div>
           <button class="btn btn-default" type="submit">Continue shopping <i class="fa fa-shopping-cart"></i></button>
-          <button class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button>
+          <button class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button> -->
         </div>
       </div>
       <!-- END CONTENT -->

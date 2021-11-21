@@ -52,27 +52,27 @@ def normaluser_logout():
     logout_user()
     return redirect("/login-user")
 
-# @app.route("/user-register", methods=["POST", "GET"])
-# def register():
-#     err_msg = ""
-#     if request.method == 'POST':
-#         try:
-#             password = request.form.get("password")    
-#             confirm_password = request.form.get("confirm-password")
-#             if password.strip() == confirm_password.strip():
-#                 data = request.form.copy()
-#                 del data['confirm-password']
+@app.route("/register-user", methods=["POST", "GET"])
+def register():
+    err_msg = ""
+    if request.method == 'POST':
+        try:
+            password = request.form.get("matkhau")    
+            confirm_password = request.form.get("confirmmatkhau")
+            if password.strip() == confirm_password.strip():
+                data = request.form.copy()
+                del data['confirmmatkhau']
 
-#                 if utils.add_user(**data):
-#                     return redirect("/user-login")
-#                 else:
-#                     err_msg = "Check your information again/Username might already exit"
-#             else:
-#                 err_msg = "Password not match"
-#         except:
-#             err_msg = "System error"
+                if utils.add_user(**data):
+                    return redirect("/login-user")
+                else:
+                    err_msg = "Kiểm tra lại thông tin/Tên đăng nhập có thể đã tồn tại"
+            else:
+                err_msg = "Mật khẩu không khớp"
+        except:
+            err_msg = "Lỗi hệ thống/Vui lòng thử lại"
 
-#     return render_template("page-reg-page.html", err_msg = err_msg)
+    return render_template("reg-user.html", err_msg = err_msg)
 
 @app.route("/list-ve")
 def list_ve():
