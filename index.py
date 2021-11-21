@@ -14,7 +14,6 @@ def user_load(user_id):
 def home():
     return render_template("home.html")
 
-
 @app.route("/login", methods=["POST"])
 def login_execute():
     username = request.form.get('username')
@@ -73,6 +72,13 @@ def register():
             err_msg = "Lỗi hệ thống/Vui lòng thử lại"
 
     return render_template("reg-user.html", err_msg = err_msg)
+
+@app.route("/forgot-password")
+def normaluer_forget_password():
+    if not current_user.is_authenticated:
+        return render_template("quen-mk.html")
+    return redirect("/")
+
 
 @app.route("/list-ve")
 def list_ve():
