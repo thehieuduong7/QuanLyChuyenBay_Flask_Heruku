@@ -19,3 +19,6 @@ def add_user(tendangnhap, tennguoidung, matkhau):
             return False
     else:
         return False
+
+def get_quydinh():
+    return QuyDinh.query.all()

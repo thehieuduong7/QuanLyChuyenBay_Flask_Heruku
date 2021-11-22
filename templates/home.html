@@ -15,80 +15,20 @@
           <div class="row">
           <!-- BEGIN LEFT SIDEBAR -->            
           <div class="col-md-9 col-sm-9 blog-posts">
-              <div class="row">
-              <div class="col-md-4 col-sm-4">
-                  <!-- BEGIN CAROUSEL -->            
-                  <div class="front-carousel">
-                  <div class="carousel slide" id="myCarousel">
-                      <!-- Carousel items -->
-                      <div class="carousel-inner">
-                      <div class="item">
-                          <img alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/works/img1.jpg') }}">
-                      </div>
-                      <div class="item">
-                          <img alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/works/img2.jpg') }}">
-                      </div>
-                      <div class="item active">
-                          <img alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/works/img3.jpg') }}">
-                      </div>
-                      </div>
-                      <!-- Carousel nav -->
-                      <a data-slide="prev" href="#myCarousel" class="carousel-control left">
-                      <i class="fa fa-angle-left"></i>
-                      </a>
-                      <a data-slide="next" href="#myCarousel" class="carousel-control right">
-                      <i class="fa fa-angle-right"></i>
-                      </a>
-                  </div>                
-                  </div>
-                  <!-- END CAROUSEL -->             
-              </div>
-
-              <div class="col-md-8 col-sm-8">
-                  <h2><a href="blog-item.html">Corrupti quos dolores etquas</a></h2>
-                  <ul class="blog-info">
-                  <li><i class="fa fa-calendar"></i> 25/07/2013</li>
-                  <li><i class="fa fa-comments"></i> 17</li>
-                  <li><i class="fa fa-tags"></i> Metronic, Keenthemes, UI Design</li>
-                  </ul>
-                  <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui sint blanditiis prae sentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non eleifend enim a feugiat. Pellentesque viverra vehicula sem ut volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing condimentum eleifend enim a feugiat.</p>
-                  <a href="blog-item.html" class="more">Read more <i class="icon-angle-right"></i></a>
-              </div>
-              </div>
-
               <hr class="blog-post-sep">
               <div class="row">
               <div class="col-md-4 col-sm-4">
-                  <!-- BEGIN VIDEO -->   
-                  <iframe height="205" allowfullscreen="" style="width:100%; border:0" src="http://player.vimeo.com/video/56974716?portrait=0"></iframe>
-                  <!-- END VIDEO -->   
+                  <img class="img-responsive" alt="" src="/static/images/ChuyenBay.jpg">
               </div>
               <div class="col-md-8 col-sm-8">
-                  <h2><a href="blog-item.html">Corrupti quos dolores etquas</a></h2>
+                  <h2><a href="#">Chuyến bay từ...đến....</a></h2>
                   <ul class="blog-info">
-                  <li><i class="fa fa-calendar"></i> 25/07/2013</li>
-                  <li><i class="fa fa-comments"></i> 17</li>
-                  <li><i class="fa fa-tags"></i> Metronic, Keenthemes, UI Design</li>
+                  <li><i class="fa fa-calendar"></i> Thời gian khởi hành</li>
+                  <li><i class="fa fa-comments"></i> Thời gian bay</li>
+                  <li><i class="fa fa-tags"></i> Máy bay</li>
                   </ul>
-                  <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui sint blanditiis prae sentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non eleifend enim a feugiat. Pellentesque viverra vehicula sem ut volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing condimentum eleifend enim a feugiat.</p>
-                  <a href="blog-item.html" class="more">Read more <i class="fa fa-angle-right"></i></a>
-              </div>
-              </div>
-
-              <hr class="blog-post-sep">
-              <div class="row">
-              <div class="col-md-4 col-sm-4">
-                  <img class="img-responsive" alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/works/img2.jpg') }}">
-              </div>
-              <div class="col-md-8 col-sm-8">
-                  <h2><a href="#">Corrupti quos dolores etquas</a></h2>
-                  <ul class="blog-info">
-                  <li><i class="fa fa-calendar"></i> 25/07/2013</li>
-                  <li><i class="fa fa-comments"></i> 17</li>
-                  <li><i class="fa fa-tags"></i> Metronic, Keenthemes, UI Design</li>
-                  </ul>
-                  <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui sint blanditiis prae sentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non eleifend enim a feugiat. Pellentesque viverra vehicula sem ut volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing condimentum eleifend enim a feugiat.</p>
-                  <a href="blog-item.html" class="more">Read more <i class="fa fa-angle-right"></i></a>
+                  <p>Thông tin thêm....</p>
+                  <a href="/" class="more">Read more <i class="fa fa-angle-right"></i></a>
               </div>
               </div>
 
@@ -103,12 +43,12 @@
               <li><a href="#">Next</a></li>
               </ul>               
           </div>
-          <!-- END LEFT SIDEBAR -->
+          
 
           <!-- BEGIN RIGHT SIDEBAR -->            
           <div class="col-md-3 col-sm-3 blog-sidebar">
               <!-- CATEGORIES START -->
-              <h2 class="no-top-space">Categories</h2>
+              <h2 class="no-top-space">Phân Loại</h2>
               <ul class="nav sidebar-categories margin-bottom-40">
 
                 <li><a href="#">London (18)</a></li>
@@ -121,11 +61,11 @@
               <div class="recent-news margin-bottom-10">
               <div class="row margin-bottom-10">
                   <div class="col-md-3">
-                  <img class="img-responsive" alt="" src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/people/img2-large.jpg') }}">                        
+                  <img class="img-responsive" alt="" src="/static/images/ChuyenBay.jpg">                        
                   </div>
                   <div class="col-md-9 recent-news-inner">
-                  <h3><a href="#">Letiusto gnissimos</a></h3>
-                  <p>Decusamus tiusto odiodig nis simos ducimus qui sint</p>
+                  <h3><a href="">Chuyến bay từ...đến....</a></h3>
+                  <p>Thông tin thêm...</p>
                   </div>                        
               </div>
               
@@ -142,10 +82,35 @@
                   </ul>
                   <div class="tab-content">
                   <div id="tab-1" class="tab-pane row-fluid fade in active">
-                      <p class="margin-bottom-10">Raw denim you probably haven't heard of them jean shorts Austin. eu banh mi, qui irure terry richardson ex squid Aliquip placeat salvia cillum iphone.</p>
+                    {% for q in quy_dinh %}
+                        {% if q.QuyDinh == 'TGDatVeTreNhat' %}
+                            <p class="margin-bottom-10">Thời Gian Đặt Vé Trễ Nhất : {{ q.NoiDung }}</p>
+                        {% elif q.QuyDinh == 'TGHuyVeTreNhat' %}
+                            <p class="margin-bottom-10">Thời Gian Hủy Vé Trễ Nhất : {{ q.NoiDung }}</p>
+                        {% else %}
+                            <p class="margin-bottom-10">Quy định khác...</p>
+                        {% endif %}
+                    {% endfor %}
                   </div>
+
                   <div id="tab-2" class="tab-pane fade">
-                      <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. aliquip jean shorts ullamco ad vinyl aesthetic magna delectus mollit. Keytar helvetica VHS salvia..</p>
+                    {% if current_user.VaiTro != "K" %}
+                        {% for q in quy_dinh %}
+                            {% if q.QuyDinh == 'SoLuongSanBay' %}
+                                <p class="margin-bottom-10">Số lượng sân bay : {{ q.NoiDung }}</p>
+                            {% elif q.QuyDinh == 'TGBayToiThieu' %}
+                                <p class="margin-bottom-10">Thời Gian Bay Tối Thiểu : {{ q.NoiDung }}</p>
+                            {% elif q.QuyDinh == 'SanBayTGToiDa' %}
+                                <p class="margin-bottom-10">Sân Bay Trung Gian Tối Đa : {{ q.NoiDung }}</p>
+                            {% elif q.QuyDinh == 'TGDungToiThieu' %}
+                                <p class="margin-bottom-10">Thời Gian Dừng Tối Thiểu : {{ q.NoiDung }}</p>
+                            {% elif q.QuyDinh == 'TGDungToiDa' %}
+                                <p class="margin-bottom-10">Thời Gian Dừng Tối Đa : {{ q.NoiDung }}</p>
+                            {% else %}
+                                <p class="margin-bottom-10">Quy đinh khác...</p>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                   </div>
                   </div>
               </div>

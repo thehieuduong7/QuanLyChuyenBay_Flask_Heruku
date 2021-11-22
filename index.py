@@ -12,7 +12,8 @@ def user_load(user_id):
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    quy_dinh = utils.get_quydinh()
+    return render_template("home.html", quy_dinh = quy_dinh)
 
 @app.route("/login", methods=["POST"])
 def login_execute():
@@ -79,7 +80,7 @@ def normaluer_forget_password():
         return render_template("quen-mk.html")
     return redirect("/")
 
-
+# Nhân Viên's
 @app.route("/list-ve")
 def list_ve():
     if current_user.VaiTro == "N":
@@ -96,6 +97,13 @@ def nhan_lich():
 def list_khach():
     if current_user.VaiTro == "N":
         return render_template("list-khachhang.html")
+
+# Khách hàng's
+@app.route("/info-ve")
+def info_ve():
+    if current_user.VaiTro == "K":
+        return render_template("info-ve.html")
+
 
 if __name__ == '__main__':
     app.run(debug=True)
