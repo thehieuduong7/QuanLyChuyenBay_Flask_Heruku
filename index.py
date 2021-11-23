@@ -103,7 +103,10 @@ def list_khach():
 def info_ve():
     if current_user.VaiTro == "K":
         return render_template("info-ve.html")
-
+@app.route("/dat-ve-online")
+def dat_ve_online():
+    if current_user.VaiTro == "K":
+        return render_template("dat-ve-online.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
