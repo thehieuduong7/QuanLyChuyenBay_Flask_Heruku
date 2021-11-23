@@ -16,9 +16,10 @@ app.secret_key = "AG(ASDAGIA(*&!@"
 db = SQLAlchemy(app=app)
 admin = Admin(app=app, name = "MY SHOP", template_mode = 'bootstrap4')
 my_login = LoginManager(app=app)
-CART_KEY = "cart"
+CART_KEY = "cart" 
 
-from flask_mail import Mail, Message
+
+from flask_mail import Mail
 mail_settings = {
     "MAIL_SERVER": 'smtp.gmail.com',
     "MAIL_PORT": 465,
@@ -27,5 +28,6 @@ mail_settings = {
     "MAIL_USERNAME":'hieuduong959@gmail.com',
     "MAIL_PASSWORD": 'llwajaaonjffyxgv'
 }
+
 app.config.update(mail_settings)
 mail = Mail(app)
