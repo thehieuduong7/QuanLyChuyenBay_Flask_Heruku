@@ -67,7 +67,7 @@ class BangGiaVeModelView(AuthenticatedView):
 class MayBayModelView(AuthenticatedView):
     can_export = True
     can_view_details = True
-   # column_editable_list = ('TinhTrang', 'Ten')
+   #column_editable_list = ('TinhTrang', 'Ten')
 
     #column_filters = ('TinhTrang', 'Ten', 'chuyenbay')
     column_searchable_list = ('Ten', 'Hang')
