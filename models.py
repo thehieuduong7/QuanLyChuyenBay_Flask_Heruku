@@ -1,17 +1,18 @@
 from datetime import datetime
+from enum import unique
 
 from flask_login import UserMixin
 from sqlalchemy import (Boolean, Column, DateTime, Float, ForeignKey, Integer,
                         String, func, or_)
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.expression import false
+from sqlalchemy.sql.expression import false, true
 
 from __init__ import db
 
 class SanBay(db.Model):
     __tablename__ = 'SanBay'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    TenSB = Column(String(30), default="NoiBai", nullable=False)
+    TenSB = Column(String(30), nullable=False,unique=True)
     DiaChi = Column(String(100), default="TP. HoChiMinh", nullable=False)
 
     chuyenbay_di = relationship("ChuyenBay", backref = "sanbay_di", lazy = True, foreign_keys='ChuyenBay.Id_SanBay_Di')
@@ -24,7 +25,7 @@ class SanBay(db.Model):
 class MayBay(db.Model):
     __tablename__ = 'MayBay'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    Ten = Column(String(30), default = "Boing 737", nullable=False)
+    Ten = Column(String(30), unique=True, nullable=False)
     Hang = Column(String(30), default= "VietNamAirLine", nullable=False)
     
     
@@ -54,6 +55,7 @@ class TrungGianChuyenBay(db.Model):
     Id_ChuyenBay = Column(Integer, ForeignKey(ChuyenBay.id, ondelete = "CASCADE"), nullable=False)
     ThoiGianDung = Column(Integer, default = 0)
     GhiChu = Column(String(100), nullable=True)
+    __table_args__ = (db.UniqueConstraint(Id_ChuyenBay, Id_SanBay),)
 
 class BangGiaVe(db.Model):
     __tablename__ = 'BangGiaVe'
@@ -62,6 +64,8 @@ class BangGiaVe(db.Model):
     HangVe = Column(String(10), default = "Thuong", nullable=False)
     GiaVe = Column(Float, default = 500000, nullable=False)
     SoGhe = Column(Integer, nullable=True)
+    __table_args__ = (db.UniqueConstraint(Id_ChuyenBay, HangVe),)
+
 
 class DoanhThuThang(db.Model):
     __tablename__ = 'DoanhThuThang'
