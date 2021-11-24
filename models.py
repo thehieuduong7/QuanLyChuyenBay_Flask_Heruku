@@ -24,9 +24,8 @@ class SanBay(db.Model):
 class MayBay(db.Model):
     __tablename__ = 'MayBay'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    Ten = Column(String(30), nullable=False,unique=True)
+    Ten = Column(String(30), default = "Boing 737", nullable=False)
     Hang = Column(String(30), default= "VietNamAirLine", nullable=False)
-
     chuyenbay = relationship("ChuyenBay", backref = "maybay", lazy = True)
 
     def __str__(self):
