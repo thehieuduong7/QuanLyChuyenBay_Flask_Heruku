@@ -61,7 +61,6 @@ class BangGiaVe(db.Model):
     GiaVe = Column(Float, default = 500000, nullable=False)
     SoGhe = Column(Integer, nullable=True)
 
-
 class DoanhThuThang(db.Model):
     __tablename__ = 'DoanhThuThang'
     id = Column(Integer, primary_key=True, autoincrement=True)
