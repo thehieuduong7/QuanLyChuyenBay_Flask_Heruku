@@ -24,9 +24,8 @@ class SanBay(db.Model):
 class MayBay(db.Model):
     __tablename__ = 'MayBay'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    Ten = Column(String(30), default = "Boing 737", nullable=False)
+    Ten = Column(String(30), nullable=False,unique=True)
     Hang = Column(String(30), default= "VietNamAirLine", nullable=False)
-    TinhTrang = Column(Boolean, default=True)
 
     chuyenbay = relationship("ChuyenBay", backref = "maybay", lazy = True)
 
@@ -158,3 +157,10 @@ if __name__ == '__main__':
     # db.session.add(user)
     # db.session.commit()
 
+#INSERT INTO `sanbay`(`TenSB`, `DiaChi`) VALUES ('SGN','TP HCM')
+#INSERT INTO `sanbay`(`TenSB`, `DiaChi`) VALUES ('HAN','Ha Noi')
+#INSERT INTO `sanbay`(`TenSB`, `DiaChi`) VALUES ('BMV','Buon Ma Thuot')
+#INSERT INTO `sanbay`(`TenSB`, `DiaChi`) VALUES ('VCA','Can Tho')
+#INSERT INTO `sanbay`(`TenSB`, `DiaChi`) VALUES ('DLI','Dat Lat')
+#INSERT INTO `sanbay`(`TenSB`, `DiaChi`) VALUES ('DAD','Da Nang')
+#INSERT INTO `sanbay`(`TenSB`, `DiaChi`) VALUES ('HUI','HUE')

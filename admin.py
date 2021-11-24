@@ -67,15 +67,15 @@ class BangGiaVeModelView(AuthenticatedView):
 class MayBayModelView(AuthenticatedView):
     can_export = True
     can_view_details = True
-    column_editable_list = ('TinhTrang', 'Ten')
+   # column_editable_list = ('TinhTrang', 'Ten')
 
-    column_filters = ('TinhTrang', 'Ten', 'chuyenbay')
+    #column_filters = ('TinhTrang', 'Ten', 'chuyenbay')
     column_searchable_list = ('Ten', 'Hang')
 
     column_labels = dict(Ten = "Tên Máy Bay",
-                        Hang = "Hãng Hàng Không",
-                        TinhTrang = "Tình Trạng")
-    column_descriptions = dict(TinhTrang = "Sẵn Sàng/Không")
+                        Hang = "Hãng Hàng Không")#,
+                        #TinhTrang = "Tình Trạng")
+  #  column_descriptions = dict(TinhTrang = "Sẵn Sàng/Không")
     can_set_page_size = True
     
 class SanBayModelView(AuthenticatedView):
