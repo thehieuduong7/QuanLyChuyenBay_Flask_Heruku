@@ -13,6 +13,32 @@
       <h1>Danh Sách Chuyến Bay</h1>
       <div class="content-page">
           <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <h3 class = "text-center">TÌm Kiếm Chuyến Bay</h3>
+                <form role="form" class="form-horizontal form-without-legend">
+                    <div class="form-group col-md-3">
+                        <label class="col-lg-4 control-label padding-left-0 padding-right-0">Nơi Đi: </label>
+                        <div class="col-lg-8">
+                            <input type="text" id="chuyenbaydi" name = "chuyenbaydi" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="col-lg-4 control-label padding-left-0 padding-right-0">Nơi Đến: </label>
+                        <div class="col-lg-8">
+                            <input type="text" id="chuyenbayden" name = "chuyenbayden" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label class="col-lg-4 control-label padding-left-0 padding-right-0">Thời Gian Xuất Phát: </label>
+                        <div class="col-lg-8">
+                            <input type="datetime-local" id="chuyenbayden" name = "chuyenbayden" class="form-control">
+                        </div>
+                    </div>
+                        <button class="btn btn-primary" type="submit">Tìm Kiếm</button>
+                        <button type="reset" class="btn btn-default">Nhập Lại</button>
+                </form>
+            </div>
+
           <!-- BEGIN LEFT SIDEBAR -->            
           <div class="col-md-9 col-sm-9 blog-posts">
               <hr class="blog-post-sep">
@@ -45,8 +71,9 @@
           </div>
           
 
-          <!-- BEGIN RIGHT SIDEBAR -->            
+          <!-- BEGIN RIGHT SIDEBAR -->       
           <div class="col-md-3 col-sm-3 blog-sidebar">
+                <br></br>       
               <!-- CATEGORIES START -->
               <h2 class="no-top-space">Phân Loại</h2>
               <ul class="nav sidebar-categories margin-bottom-40">
