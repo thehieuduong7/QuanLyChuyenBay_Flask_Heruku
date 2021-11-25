@@ -1,9 +1,11 @@
 from flask import render_template, request, redirect, session, jsonify
+from sqlalchemy.sql.sqltypes import Date
 from __init__ import app, CART_KEY, my_login
 from admin import*
 from models import*
 from flask_login import login_user
 import utils
+from datetime import datetime, date
 
 @my_login.user_loader
 #Bỏ cả đối tượng vào biến current_user
@@ -13,7 +15,16 @@ def user_load(user_id):
 @app.route("/")
 def home():
     quy_dinh = utils.get_quydinh()
-    return render_template("home.html", quy_dinh = quy_dinh)
+    time = request.args.get("time") 
+    flights = utils.get_flight(noi_di=request.args.get("noidi"),
+                                noi_den=request.args.get("noiden"),
+                                time=time)
+    newest_flight = utils.get_newest_flight()
+    sanbay = utils.get_all_san_bay()
+    return render_template("home.html", quy_dinh = quy_dinh,
+                                        flights=flights,
+                                        newest_flight = newest_flight,
+                                        sanbay = sanbay)
 
 @app.route("/login", methods=["POST"])
 def login_execute():
