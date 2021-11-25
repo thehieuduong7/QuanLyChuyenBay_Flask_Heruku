@@ -7,6 +7,35 @@
       <!-- BEGIN CONTENT -->
       <div class="col-md-12 col-sm-12">
         <h1>Danh Sách Vé</h1>
+        <div class="col-md-12 col-sm-12">
+          <h3 class = "text-center">TÌm Kiếm Vé</h3>
+          <form role="form" class="form-horizontal form-without-legend">
+              <div class="form-group col-md-5">
+                  <label class="col-lg-4 control-label padding-right-0 padding-left-0">Tên Khách Hàng: </label>
+                  <div class="col-lg-8">
+                      <input type="text" id="hoten" name = "hoten" class="form-control">
+                  </div>
+              </div>
+              <div class="form-group col-md-3">
+                  <label class="col-lg-4 control-label padding-right-0 padding-left-0">Nơi Đi: </label>
+                  <div class="col-lg-8">
+                      <input type="text" id="noidi" name = "noidi" class="form-control">
+                  </div>
+              </div>
+              <div class="form-group col-md-3">
+                <label class="col-lg-4 control-label padding-right-0 padding-left-0">Nơi Đến: </label>
+                <div class="col-lg-8">
+                    <input type="text" id="noiden" name = "noiden" class="form-control">
+                </div>
+              </div>
+              <button class="btn btn-primary" type="submit">Tìm Kiếm</button>
+              <button type="reset" class="btn btn-default">Nhập Lại</button>
+          </form>
+        </div>
+
+
+
+
         <div class="goods-page">
           <div class="goods-data clearfix">
             <div class="table-wrapper-responsive">
@@ -84,37 +113,4 @@
     <!-- END SIDEBAR & CONTENT -->
   </div>
 </div>
-
-
-<!-- BEGIN STEPS -->
-<!-- <div class="steps-block steps-block-red">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4 steps-block-col">
-        <i class="fa fa-truck"></i>
-        <div>
-          <h2>Free shipping</h2>
-          <em>Express delivery withing 3 days</em>
-        </div>
-        <span>&nbsp;</span>
-      </div>
-      <div class="col-md-4 steps-block-col">
-        <i class="fa fa-gift"></i>
-        <div>
-          <h2>Daily Gifts</h2>
-          <em>3 Gifts daily for lucky customers</em>
-        </div>
-        <span>&nbsp;</span>
-      </div>
-      <div class="col-md-4 steps-block-col">
-        <i class="fa fa-phone"></i>
-        <div>
-          <h2>477 505 8877</h2>
-          <em>24/7 customer care available</em>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-<!-- END STEPS -->
 {% endblock %}
