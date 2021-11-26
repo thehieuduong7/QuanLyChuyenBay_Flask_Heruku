@@ -6,6 +6,7 @@ from models import*
 from flask_login import login_user
 import utils
 from datetime import datetime, date
+import math
 
 @my_login.user_loader
 #Bỏ cả đối tượng vào biến current_user
@@ -14,17 +15,31 @@ def user_load(user_id):
 
 @app.route("/")
 def home():
-    quy_dinh = utils.get_quydinh()
-    time = request.args.get("time") 
+    quy_dinh = utils.get_quydinh() 
+    size = app.config["PAGE_SIZE"]
+    index = request.args.get("page")
+    if index:
+        index = int(index)
+    else:
+        index = 1
     flights = utils.get_flight(noi_di=request.args.get("noidi"),
                                 noi_den=request.args.get("noiden"),
-                                time=time)
+                                time=request.args.get("time"))
+    count = utils.count_flights(flights)
+    flights = utils.paging(flights, index)
+    
     newest_flight = utils.get_newest_flight()
     sanbay = utils.get_all_san_bay()
+
     return render_template("home.html", quy_dinh = quy_dinh,
                                         flights=flights,
                                         newest_flight = newest_flight,
-                                        sanbay = sanbay)
+                                        sanbay = sanbay,
+                                        page_num=math.ceil(count/size),
+                                        noi_di=request.args.get("noidi"),
+                                        noi_den=request.args.get("noiden"),
+                                        time = request.args.get("time"),
+                                        index = index)
 
 @app.route("/login", methods=["POST"])
 def login_execute():
