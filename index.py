@@ -119,5 +119,11 @@ def dat_ve_online():
     if current_user.VaiTro == "K":
         return render_template("dat-ve-online.html")
 
+
+# Khách hàng & Nhân viên
+@app.route("/doi-ve")
+def doi_ve():
+    if current_user.is_authenticated:
+        return render_template("doi-ve.html")
 if __name__ == '__main__':
     app.run(debug=True)
