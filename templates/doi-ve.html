@@ -4,37 +4,43 @@
   <div class="container">
     <ul class="breadcrumb">
         <li><a href="/">Home</a></li>
-        <li><a href="">Chuyến bay</a></li>
-        <li class="active">Nhập lịch chuyến bay</li>
+        <li><a href="/info-ve">Vé</a></li>
+        <li class="active">Đổi Vé</li>
     </ul>
     <!-- BEGIN SIDEBAR & CONTENT -->
     <div class="row margin-bottom-40">
       <!-- BEGIN SIDEBAR -->
       <div class="sidebar col-md-3 col-sm-5">
+      {% if current_user.VaiTro == "N" %}
         <ul class="list-group margin-bottom-25 sidebar-menu">
           <li class="list-group-item clearfix"><a href="/list-ve"><i class="fa fa-angle-right"></i> Danh sách vé</a></li>
           <li class="list-group-item clearfix"><a href="/list-khach"><i class="fa fa-angle-right"></i> Danh sách khách hàng</a></li>
           <li class="list-group-item clearfix"><a href="/"><i class="fa fa-angle-right"></i> Danh sách chuyến bay</a></li>
         </ul>
+      {% elif current_user.VaiTro == "K" %}
+      <ul class="list-group margin-bottom-25 sidebar-menu">
+        <li class="list-group-item clearfix"><a href="/"><i class="fa fa-angle-right"></i> Tra Cứu Chuyến Bay</a></li>
+      </ul>
+      {% endif %}
       </div>
       <!-- END SIDEBAR -->
 
       <!-- BEGIN CONTENT -->
       <div class="col-md-9 col-sm-7">
-        <h1>Nhập thông tin chuyến bay</h1>
+        <h1>Đổi Vé</h1>
         {% if not err_msg %}
               <div class = "alert alert-success">
-               Thông báo nhập thành công {{ err_msg }}
+               Thông báo đổi vé thành công {{ err_msg }}
               </div>
         {% endif %}
         <div class="content-form-page">
           <form role="form" class="form-horizontal form-without-legend">
             
             <div class="form-group">
-              <label class="col-md-2 control-label">Máy Bay<span class="require">*</span></label>
+              <label class="col-md-2 control-label">Hạng Vé<span class="require">*</span></label>
               <div class="col-md-8">
                 <select class="form-control" required>
-                  <option>--- Chọn một máy bay ---</option>
+                  <option>--- Chọn Một Hạng Vé ---</option>
                   <option>Option 1</option>
                   <option>Option 2</option>
                 </select>
@@ -42,7 +48,7 @@
             </div>
 
             <div class="form-group">
-              <label class="col-md-2 control-label">Sân Bay Đi<span class="require">*</span></label>
+              <label class="col-md-2 control-label">Sân Bay Đi: <span class="require">*</span></label>
               <div class="col-md-8">
                 <select class="form-control" required>
                   <option>--- Chọn một sân bay ---</option>
@@ -53,7 +59,7 @@
             </div>
 
             <div class="form-group">
-              <label class="col-md-2 control-label">Sân Bay Đến<span class="require">*</span></label>
+              <label class="col-md-2 control-label">Sân Bay Đến: <span class="require">*</span></label>
               <div class="col-md-8">
                 <select class="form-control" required>
                   <option>--- Chọn một sân bay ---</option>
@@ -64,35 +70,15 @@
             </div>
             
             <div class="form-group">
-              <label class="col-lg-2 control-label" for="email">Thời Gian Xuất Phát <span class="require">*</span></label>
+              <label class="col-lg-2 control-label" for="email">Thời Gian Xuất Phát: </label>
               <div class="col-lg-8">
-                <input type="datetime-local" id="tgxuatphat" name = "tgxuatphat" class="form-control" required>
+                <input type="datetime-local" id="tgxuatphat" name = "tgxuatphat" class="form-control" disabled>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-lg-2 control-label">Thời Gian Bay<span class="require">*</span></label>
+              <label class="col-lg-2 control-label">Thời Gian Bay: </label>
               <div class="col-lg-8">
-                <input type="number" id="tgbay" name="tgbay" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Số Ghế <span class="require">*</span></label>
-              <div class="col-lg-8">
-                <input type="number" id="soghe" name = "soghe" class="form-control" required>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-md-2 control-label">Trung Gian</label>
-              <div class="col-md-7">
-                <select class="form-control">
-                  <option>--- Chọn một sân bay ---</option>
-                  <option>Option 1</option>
-                  <option>Option 2</option>
-                </select>
-              </div>
-              <div class="col-md-2">
-                <button class="btn btn-primary" type="button">+</button>
+                <input type="number" id="tgbay" name="tgbay" class="form-control" disabled>
               </div>
             </div>
             <div class="row">
