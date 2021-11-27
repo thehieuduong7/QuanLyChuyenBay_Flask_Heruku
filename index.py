@@ -118,7 +118,11 @@ def ban_ve():
 @app.route("/nhan-lich")
 def nhan_lich():
     if current_user.VaiTro == "N":
-        return render_template("nhanlichchuyenbay.html")
+        listAllMB = MayBay.query.all()
+        listAllSB=SanBay.query.all()
+        print(listAllMB)
+        return render_template("nhanlichchuyenbay.html",listAllMB=listAllMB,
+                               listAllSB=listAllSB)
 @app.route("/list-khach")
 def list_khach():
     if current_user.VaiTro == "N":
