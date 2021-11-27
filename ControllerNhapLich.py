@@ -1,4 +1,5 @@
 from operator import and_
+from ControllerQuyDinh import QuyDinhController
 from __init__ import db,app
 from models import *
 from flask import request
@@ -9,6 +10,27 @@ from sqlalchemy import exc
 def listSanBay():
     return SanBay.query.all().last()
 class NhapLichController():
+    def checkQuyDinh(self,data):
+        ThoiGianBay=data['ThoiGianBay']
+        ListrungGian = data['ListrungGian']
+        quyDinhDAO =QuyDinhController()
+        minTimeBay = int(quyDinhDAO.ThoiGianBayToiThieu.NoiDung)
+        if(ThoiGianBay<minTimeBay): return False
+        
+        soLuongTrungGian = len(ListrungGian)
+        maxLen = int(quyDinhDAO.SoSanBayTrungGianToiDa().NoiDung)
+        if(maxLen<soLuongTrungGian): return False
+        
+        thoiGianDungMin = int(quyDinhDAO.ThoiGianDungToiThieu().NoiDung)
+        thoiGianDungMax = int(quyDinhDAO.ThoiGianDungToiDa().NoiDung)
+
+        for tg in ListrungGian:
+            if(tg['ThoiGianDung']<thoiGianDungMin or 
+               tg['ThoiGianDung']>thoiGianDungMax):
+                return False
+        return True
+        
+        
     
     def insertChuyenBay(self,data):
         Id_MayBay=data['Id_MayBay']
@@ -24,7 +46,8 @@ class NhapLichController():
         chuyenBay = ChuyenBay.query.order_by(ChuyenBay.id.desc()).first()
         return chuyenBay
     
-    def checkData(self,data):
+    def nhapLich(self,data):
+        if(self.checkQuyDinh(data)==False): return False
         ListrungGian = data['ListrungGian']
         db.session.begin()
         try:

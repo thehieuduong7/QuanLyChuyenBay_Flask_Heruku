@@ -2,11 +2,26 @@ from flask_mail import Message
 from sqlalchemy.sql.expression import null
 from ControllerKhachHang import KhachHangController
 from ControllerNhapLich import NhapLichController
+from ControllerQuyDinh import QuyDinhController
 from models import *
 from __init__ import db,app,mail
 from datetime import date
 
 class TicketController:
+    def checkQuyDinh(self,idChuyenBay):
+        quyDinhDAO = QuyDinhController()
+        minDatVe = quyDinhDAO.ThoiGianDatVeToiThieu()
+        minDatVe= int(minDatVe.NoiDung)
+        chuyenBay = ChuyenBay.query.get(idChuyenBay)
+        if(chuyenBay==None): return False
+        ThoiGianXuatPhat = chuyenBay.ThoiGianXuatPhat
+        diff_now = (ThoiGianXuatPhat-datetime.today()).days
+        
+        if(minDatVe>diff_now):
+            return False
+        return True
+        
+        
     def checkDuVe(self,idChuyenBay,hangVe,soLuongDat):
         SoLuongDaBan = len(Ve.query.filter_by(Id_ChuyenBay=idChuyenBay).all())
         TongSoLuongVe  = BangGiaVe.query.filter_by(Id_ChuyenBay=idChuyenBay,
@@ -131,4 +146,4 @@ if(__name__=='__main__'):
     #print(nhapThongTinKhachHang(data))
     #nhapThongTinKhachHang()
     #print(TongThanhToan(1,'Thuong',2))
-    print(TicketController().tongTienVeBanDuoc(1))
+    print(TicketController().checkQuyDinh(9))
