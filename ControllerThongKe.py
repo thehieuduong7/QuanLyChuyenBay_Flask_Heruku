@@ -86,5 +86,10 @@ def doanhThuNam(nam):
     thongKeDAO.updateNewIntoDatabase(nam)
     return DoanhThuNam.query.filter(DoanhThuNam.Nam==nam).all()
 
+def doanhThuThang(thang,nam):
+    thongKeDao = ThongKeThangController()
+    thongKeDao.updateNewIntoDatabase(thang,nam)
+    return DoanhThuThang.query.filter(DoanhThuThang.Thang==thang
+                                 ,DoanhThuThang.Nam==nam).all()
 if(__name__=='__main__'):
     print(doanhThuNam(2021))
