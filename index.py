@@ -115,6 +115,12 @@ def list_ve():
 def ban_ve():
     if current_user.VaiTro == "N":
         return render_template("banve.html")
+
+@app.route("/ban-ve-copy")
+def ban_ve_cop():
+    number_kh = request.args.get("number_kh")
+    number_kh=int(number_kh)
+    return render_template("banve copy.html",number_kh=number_kh)
 @app.route("/nhan-lich")
 def nhan_lich():
     if current_user.VaiTro == "N":
