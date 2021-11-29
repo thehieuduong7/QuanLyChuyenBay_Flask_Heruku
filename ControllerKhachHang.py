@@ -10,3 +10,8 @@ class KhachHangController():
     def delete(self,kh):
         db.session.delete(kh)
         
+    def search(self,search):
+        search= "%"+search.strip()+"%"
+        return KhachHang.query.filter(KhachHang.HoTenKH.like(search)).all()
+    
+    

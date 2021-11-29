@@ -1,3 +1,4 @@
+from flask.templating import render_template
 from flask_mail import Message
 from sqlalchemy.sql.expression import null
 from ControllerKhachHang import KhachHangController
@@ -83,15 +84,15 @@ class TicketController:
             mail.send(msg)
             return true
 
-    def datNhieuVe(cls,Id_ChuyenBay,HangVe,list_kh):
+    def datNhieuVe(self,Id_ChuyenBay,HangVe,list_kh):
         kh_dao = KhachHangController()
         for kh in list_kh:
             id= kh_dao.nhapThongTinKhachHang(kh).id
-            ve = cls.datVe(Id_ChuyenBay,HangVe,id)
+            ve = self.datVe(Id_ChuyenBay,HangVe,id)
             if(ve==None):
                 db.session.rollback()
                 return False
-            cls.sendTicketByMail(ve)
+            self.sendTicketByMail(ve)
         db.session.commit()
         return True
     
