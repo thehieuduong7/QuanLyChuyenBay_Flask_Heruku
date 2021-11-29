@@ -1,16 +1,23 @@
-from flask import redirect
-from flask_admin import BaseView, expose
-from flask_admin.contrib.sqla import ModelView, form
+from flask import redirect, request
+from flask_admin import BaseView, expose, AdminIndexView, Admin
+from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user, logout_user
 
-from __init__ import admin, db
+from __init__ import db, app
 from models import*
-
-
+import ControllerThongKe
 #view chứng thực, quyền cho phép đăng nhập vào view
 class AuthenticatedView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.VaiTro == "A"
+class MyAdminIndex(AdminIndexView):
+    @expose("/")
+    def index(self):
+        return self.render('admin/index.html')
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.VaiTro == "A"
+
+admin = Admin(app=app, name = "UTE SHOP", template_mode = 'bootstrap4', index_view=MyAdminIndex())
 
 class LogoutView(BaseView):
     @expose('/')
@@ -19,10 +26,41 @@ class LogoutView(BaseView):
         return redirect("/admin")
     def is_accessible(self):
         return current_user.is_authenticated
-class DoanhThu(AuthenticatedView):
+class DoanhThuThangView(BaseView):
     @expose('/')
     def index(self):
-        return self.render("admin/stats.html") 
+        thang = request.args.get("thang")
+        nam = request.args.get("nam")
+
+        if not thang:
+            thang = 1
+        else:
+            thang = int(thang)
+        if not nam:
+            nam = 2021
+        else:
+            nam = int(nam)
+
+        stats = ControllerThongKe.doanhThuThang(thang, nam)
+
+        return self.render("admin/doanhthuthang_stats.html", stats = stats)
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.VaiTro == "A"
+
+class DoanhThuNamView(BaseView):
+    @expose('/')
+    def index(self):
+        nam = request.args.get("nam")
+        
+        if not nam:
+            nam = 2021
+        else:
+            nam = int(nam)
+
+        stats = ControllerThongKe.doanhThuNam(nam)
+        return self.render("admin/doanhthunam_stats.html", stats = stats)
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.VaiTro == "A"
 
 # class QuyDinh(BaseView):
 #     @expose('/')
@@ -195,8 +233,9 @@ admin.add_view(VeModelView(Ve, db.session, name = "Ve"))
 admin.add_view(TrungGianModelView(TrungGianChuyenBay, db.session, name ="TrungGian"))
 admin.add_view(NguoiDungModelView(NguoiDung, db.session, name ="Users"))
 
-admin.add_view(DoanhThu(DoanhThuThang, db.session, name = "DoanhThuThang"))
-admin.add_view(DoanhThu(DoanhThuNam, db.session, name = "DoanhThuNam"))
+admin.add_view(DoanhThuNamView(name = "DoanhThuNam"))
+admin.add_view(DoanhThuThangView(name = "DoanhThuThang"))
+
 admin.add_view(QuyDinhModelView(QuyDinh, db.session, name = "QuyDinh"))
 admin.add_view(LogoutView(name = "DangXuat"))
 

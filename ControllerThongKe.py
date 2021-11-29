@@ -1,9 +1,5 @@
-
-import ControllerNhapLich
-from admin import DoanhThu
-from index import dat_ve_online
 from models import *
-from __init__ import db,app
+from __init__ import db
 from datetime import date
 from ControllerTicket import TicketController
 from ControllerNhapLich import NhapLichController
