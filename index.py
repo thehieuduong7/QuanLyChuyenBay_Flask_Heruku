@@ -135,9 +135,8 @@ def info_ve():
         return render_template("info-ve.html")
 @app.route("/dat-ve-online")
 def dat_ve_online():
-    if current_user.VaiTro == "K":
+    if current_user.is_authenticated:
         return render_template("dat-ve-online.html")
-
 
 # Khách hàng & Nhân viên
 @app.route("/doi-ve")
