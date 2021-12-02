@@ -108,6 +108,7 @@ class TicketController:
                 list_ve.append(ve)
             self.sendTicketByMail(list_ve)
             db.session.commit()
+            return True
         except exc.SQLAlchemyError:
             db.session.rollback()
             return False
