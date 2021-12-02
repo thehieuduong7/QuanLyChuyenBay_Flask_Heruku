@@ -94,7 +94,7 @@ class TicketController:
                     recipients=[content['email']],
                     body=content['contentSend'])
                 mail.send(msg)
-        return true
+            return true
         
 
 
@@ -106,8 +106,8 @@ class TicketController:
                 id=kh_dao.insert(kh).id
                 ve = self.datVe(Id_ChuyenBay,HangVe,id)
                 list_ve.append(ve)
-            self.sendTicketByMail(list_ve)
             db.session.commit()
+            self.sendTicketByMail(list_ve)
             return True
         except exc.SQLAlchemyError:
             db.session.rollback()
@@ -158,8 +158,8 @@ if(__name__=='__main__'):
     data_kh['HoTenKH']='hieu1'
     data_kh['GioiTinh']='nam'
     data_kh['NamSinh']='2001'
-    data_kh['SDT']='16'
-    data_kh['CMND']='16'
+    data_kh['SDT']='26'
+    data_kh['CMND']='26'
     data_kh['Email']='19110362@student.hcmute.edu.vn'
     data_kh['HinhAnh'] = None
     list_kh=[]
@@ -167,15 +167,38 @@ if(__name__=='__main__'):
     data_kh['HoTenKH']='hieu dem2'
     data_kh['GioiTinh']='nam'
     data_kh['NamSinh']='2001'
-    data_kh['SDT']='17'
-    data_kh['CMND']='17'
+    data_kh['SDT']='27'
+    data_kh['CMND']='27'
     data_kh['Email']='19110362@student.hcmute.edu.vn'
     data_kh['HinhAnh'] = None
     list_kh.append(data_kh.copy())
     ticDAO =TicketController()
     Id_ChuyenBay=1
     HangVe='Thuong'
-    #print(ticDAO.datNhieuVe(1,'Thuong',list_kh))
+    print(ticDAO.datNhieuVe(1,'Thuong',list_kh))
+    data_kh={}
+    data_kh['HoTenKH']='hieu1'
+    data_kh['GioiTinh']='nam'
+    data_kh['NamSinh']='2001'
+    data_kh['SDT']='28'
+    data_kh['CMND']='28'
+    data_kh['Email']='19110362@student.hcmute.edu.vn'
+    data_kh['HinhAnh'] = None
+    list_kh=[]
+    list_kh.append(data_kh.copy())
+    data_kh['HoTenKH']='hieu dem2'
+    data_kh['GioiTinh']='nam'
+    data_kh['NamSinh']='2001'
+    data_kh['SDT']='29'
+    data_kh['CMND']='29'
+    data_kh['Email']='19110362@student.hcmute.edu.vn'
+    data_kh['HinhAnh'] = None
+    list_kh.append(data_kh.copy())
+    ticDAO =TicketController()
+    Id_ChuyenBay=1
+    HangVe='Thuong'
+    print(ticDAO.datNhieuVe(1,'Thuong',list_kh))
+    
     #print(ticDAO.datVe(1,'Thuong',26))
     khDAO = KhachHangController()
     #print(khDAO.insert(data_kh))
@@ -196,5 +219,5 @@ if(__name__=='__main__'):
     '''
     ve1= Ve.query.get(24)
     ve2=Ve.query.get(25)
-    print(ticDAO.sendTicketByMail([ve1,ve2]))
-    print(ticDAO.sendTicketByMail([ve1,ve2]))
+    #print(ticDAO.sendTicketByMail([ve1,ve2]))
+    #print(ticDAO.sendTicketByMail([ve1,ve2]))
