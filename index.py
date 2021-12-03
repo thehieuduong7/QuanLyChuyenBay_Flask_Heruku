@@ -39,7 +39,8 @@ def home():
                                         noi_di=request.args.get("noidi"),
                                         noi_den=request.args.get("noiden"),
                                         time = request.args.get("time"),
-                                        index = index)
+                                        index = index,
+                                        mess = request.args.get("mess"))
 
 @app.route("/login", methods=["POST"])
 def login_execute():
@@ -128,17 +129,48 @@ def list_khach():
 @app.route("/info-ve")
 def info_ve():
     if current_user.VaiTro == "K":
-        return render_template("info-ve.html")
+        ve = utils.ve_da_mua(request.args.get("id"))
+        return render_template("info-ve.html", ve=ve)
 @app.route("/dat-ve-online")
 def dat_ve_online():
     if current_user.VaiTro == "K":
         return render_template("dat-ve-online.html")
 
-
-# Khách hàng & Nhân viên
+@app.route("/api/check-ve/<id_ve>", methods=['post'])
+def check_ve(id_ve):
+    ve = utils.get_ve(id_ve)
+    if ve:
+        if utils.check_ve(ve)==true:
+            return jsonify({
+                "error_code": 200
+            })
+    return jsonify({
+        "error_code": 404
+    })
+    #if current_user.is_authenticated:
+        #return render_template("doi-ve.html")
 @app.route("/doi-ve")
-def doi_ve():
-    if current_user.is_authenticated:
-        return render_template("doi-ve.html")
+def doi_tra_ve():
+    return render_template("doi-ve.html")
+# Khách hàng & Nhân viên
+@app.route("/doi-ve", methods=['put'])
+def doi_ve(id_ve, id_chuyen_bay, hang_ve):
+    if utils.doi_ve(id_ve=id_ve, id_chuyen_bay=id_chuyen_bay, hang_ve=hang_ve)==true:
+        pass
+    #if current_user.is_authenticated:
+        #return render_template("doi-ve.html")
+
+@app.route("/api/tra-ve/<id_ve>", methods=['delete'])
+def tra_ve(id_ve):
+    #data = request.args.get('ve')
+    #data = request.json
+    #id_ve = str(data['id_ve'])
+    if utils.xoa_ve(ve)==true:
+        return jsonify({
+            "error_code": 200,
+        })
+    return jsonify({
+        "error_code": 400
+    })
 if __name__ == '__main__':
     app.run(debug=True)

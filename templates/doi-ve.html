@@ -11,7 +11,7 @@
     <div class="row margin-bottom-40">
       <!-- BEGIN SIDEBAR -->
       <div class="sidebar col-md-3 col-sm-5">
-      {% if current_user.VaiTro == "N" %}
+      <!-- {% if current_user.VaiTro == "N" %}
         <ul class="list-group margin-bottom-25 sidebar-menu">
           <li class="list-group-item clearfix"><a href="/list-ve"><i class="fa fa-angle-right"></i> Danh sách vé</a></li>
           <li class="list-group-item clearfix"><a href="/list-khach"><i class="fa fa-angle-right"></i> Danh sách khách hàng</a></li>
@@ -21,20 +21,54 @@
       <ul class="list-group margin-bottom-25 sidebar-menu">
         <li class="list-group-item clearfix"><a href="/"><i class="fa fa-angle-right"></i> Tra Cứu Chuyến Bay</a></li>
       </ul>
-      {% endif %}
+      {% endif %} -->
+      <ul class="list-group margin-bottom-25 sidebar-menu">
+        <li class="list-group-item clearfix"><a href="/"><i class="fa fa-angle-right"></i> Tra Cứu Chuyến Bay</a></li>
+      </ul>
       </div>
+      
       <!-- END SIDEBAR -->
 
       <!-- BEGIN CONTENT -->
       <div class="col-md-9 col-sm-7">
-        <h1>Đổi Vé</h1>
-        {% if not err_msg %}
-              <div class = "alert alert-success">
-               Thông báo đổi vé thành công {{ err_msg }}
-              </div>
-        {% endif %}
+        <h1>Đổi Trả Vé</h1>
         <div class="content-form-page">
-          <form role="form" class="form-horizontal form-without-legend">
+            <div class="input-group">
+              <input type="text" id="ve" name="ve" placeholder="Nhập mã vé" class="form-control">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" onclick="check(0)">Đổi</button>
+                <button class="btn btn-primary" onclick="check(1)">Trả</button>
+              </span>
+            </div>
+        <div id="doi-ve"></div>
+        </div>
+      </div>
+      <!-- END CONTENT -->
+    </div>
+    <!-- END SIDEBAR & CONTENT -->
+  </div>
+</div>
+<script>
+  function check(action){
+    //var ve = document.getElementById('ve').innerHTML;
+    var ve = $('#ve').val();
+    checkVe(ve, action);
+  }
+</script>
+<script>
+   function checkVe(ve, action) {
+    fetch("/api/check-ve/"+ve, {
+        method: "post"
+    }).then(function(res) {
+        return res.json()
+    }).then(function(data) {
+        if (data.error_code == 404)
+            alert("Vé đã quá thời gian trả không tồn tại hoặc đã quá thời gian đổi trả!")
+        else
+        {
+            if (action==0)
+            {
+              $("doi-ve").append(<form role="form" class="form-horizontal form-without-legend">
             
             <div class="form-group">
               <label class="col-md-2 control-label">Hạng Vé<span class="require">*</span></label>
@@ -87,12 +121,13 @@
                 <button type="reset" class="btn btn-default">Nhập Lại</button>
               </div>
             </div>
-          </form>
-        </div>
-      </div>
-      <!-- END CONTENT -->
-    </div>
-    <!-- END SIDEBAR & CONTENT -->
-  </div>
-</div>
+          </form>)
+            } 
+            else
+                deleteVe(ve)
+        }
+    })
+}
+</script>
+
 {% endblock %}

@@ -6,8 +6,12 @@
       <li><a href="/">Home</a></li>
       <li class="active">Chuyến Bay</li>
   </ul>
+  {% if mess%}
+  {{ mess }}
+  {% endif %}
   <!-- BEGIN SIDEBAR & CONTENT -->
   <div class="row margin-bottom-40">
+      
       <!-- BEGIN CONTENT -->
       <div class="col-md-12 col-sm-12">
       <h1>Danh Sách Chuyến Bay</h1>
@@ -35,7 +39,7 @@
                     <div class="form-group col-md-5">
                         <label class="col-lg-4 control-label padding-left-0 padding-right-0">Thời Gian Xuất Phát: </label>
                         <div class="col-lg-8">
-                            <input type="datetime-local" id="time" name = "time" class="form-control">
+                            <input type="datetime-local" id="time" name = "time" class="form-control" required>
                         </div>
                     </div>
                         <button class="btn btn-primary" type="submit">Tìm Kiếm</button>
@@ -193,4 +197,9 @@
   <!-- END SIDEBAR & CONTENT -->
   </div>
 </div>
+<script>
+    function myFunction() {
+      alert('Trả thành công');
+    }
+</script>
 {% endblock %}
