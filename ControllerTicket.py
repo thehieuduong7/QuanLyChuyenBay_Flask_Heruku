@@ -7,6 +7,9 @@ from ControllerQuyDinh import QuyDinhController
 from models import *
 from __init__ import db,app,mail
 from datetime import date
+from sqlalchemy import exc
+import os
+from datetime import datetime
 
 class TicketController:
     def checkQuyDinh(self,idChuyenBay):
@@ -41,60 +44,75 @@ class TicketController:
         return tongTien
     def datVe(self,Id_ChuyenBay,HangVe,id_kh):
         ve =Ve(Id_ChuyenBay=Id_ChuyenBay,HangVe=HangVe,
-            ThoiGianDatVe=date.today(),Id_KhachHang=id_kh)
+            ThoiGianDatVe=datetime.now(),Id_KhachHang=id_kh)
         db.session.add(ve)
-        ve = Ve.query.order_by(Ve.id.desc()).first()
+        db.session.flush()
+        db.session.refresh(ve)
         return ve
-    def sendTicketByMail(self,veMayBay):
-        if(veMayBay==None):
-            return False
-        
-        name = veMayBay.khachhang.HoTenKH
-        id_ve=veMayBay.id
-        thoiGianDat= veMayBay.ThoiGianDatVe
-        hangVe=veMayBay.HangVe
-        
-        chuyenBay = veMayBay.chuyenbay
-        id_chuyenBay=chuyenBay.id
-        sanBayDi=chuyenBay.sanbay_di.DiaChi+' ('+chuyenBay.sanbay_di.TenSB+')'
-        sanBayDen=chuyenBay.sanbay_den.DiaChi+' ('+chuyenBay.sanbay_den.TenSB+')'
-        bangGiaVe = BangGiaVe.query.filter_by(Id_ChuyenBay=id_chuyenBay,HangVe=hangVe ).first()
-        giaVe=bangGiaVe.GiaVe
-        
-        email = veMayBay.khachhang.Email
-        content = '''
-            Hang hang khong gia re                                      Sai gon {time}
-                                                    THONG TIN VE MAY BAY
-            Khach hang: {name}
-            Ma ve: {id_ve}
-            Chuyen bay: {id_chuyenBay}
-            San bay di: {sanBayDi:15} San bay den:{sanBayDen:20}
-            Hang ve: {hangVe}
-            Gia ve: {giaVe} dong
-            Thoi gian dat: {thoiGianDat}
-        '''
-        contentSend = content.format(time=date.today(),name=name,id_ve=id_ve,
-            id_chuyenBay=id_chuyenBay,sanBayDi=sanBayDi,sanBayDen=sanBayDen,hangVe=hangVe,
-            giaVe=giaVe,thoiGianDat=thoiGianDat)
+    def sendTicketByMail(self,ListveMayBay):
+        ListContent=[]
+        for veMayBay in ListveMayBay:
+            if(veMayBay==None):
+                return False
+            
+            name = veMayBay.khachhang.HoTenKH
+            id_ve=veMayBay.id
+            thoiGianDat= veMayBay.ThoiGianDatVe
+            hangVe=veMayBay.HangVe
+            
+            chuyenBay = veMayBay.chuyenbay
+            id_chuyenBay=chuyenBay.id
+            sanBayDi=chuyenBay.sanbay_di.DiaChi+' ('+chuyenBay.sanbay_di.TenSB+')'
+            sanBayDen=chuyenBay.sanbay_den.DiaChi+' ('+chuyenBay.sanbay_den.TenSB+')'
+            bangGiaVe = BangGiaVe.query.filter_by(Id_ChuyenBay=id_chuyenBay,HangVe=hangVe ).first()
+            giaVe=bangGiaVe.GiaVe
+            
+            email = veMayBay.khachhang.Email
+            content = '''
+                Hang hang khong gia re                                      Sai gon {time}
+                                                        THONG TIN VE MAY BAY
+                Khach hang: {name}
+                Ma ve: {id_ve}
+                Chuyen bay: {id_chuyenBay}
+                San bay di: {sanBayDi:15} San bay den:{sanBayDen:20}
+                Hang ve: {hangVe}
+                Gia ve: {giaVe} dong
+                Thoi gian dat: {thoiGianDat}
+            '''
+            contentSend = content.format(time=date.today(),name=name,id_ve=id_ve,
+                id_chuyenBay=id_chuyenBay,sanBayDi=sanBayDi,sanBayDen=sanBayDen,hangVe=hangVe,
+                giaVe=giaVe,thoiGianDat=thoiGianDat)
+            msg={}
+            msg['email']=email
+            msg['contentSend']=contentSend
+            ListContent.append(msg.copy())
+
         with app.app_context():
-            msg = Message(subject="Ve may bay gia re",
-                sender=app.config.get("MAIL_USERNAME"),
-                recipients=[email],
-                body=contentSend)
-            mail.send(msg)
+            for content in ListContent:
+                msg = Message(subject="Ve may bay gia re",
+                    sender=app.config.get("MAIL_USERNAME"),
+                    recipients=[content['email']],
+                    body=content['contentSend'])
+                mail.send(msg)
             return true
+        
+
 
     def datNhieuVe(self,Id_ChuyenBay,HangVe,list_kh):
-        kh_dao = KhachHangController()
-        for kh in list_kh:
-            id= kh_dao.nhapThongTinKhachHang(kh).id
-            ve = self.datVe(Id_ChuyenBay,HangVe,id)
-            if(ve==None):
-                db.session.rollback()
-                return False
-            self.sendTicketByMail(ve)
-        db.session.commit()
-        return True
+        kh_dao=KhachHangController()
+        try:
+            list_ve=[]
+            for kh in list_kh:
+                id=kh_dao.insert(kh).id
+                ve = self.datVe(Id_ChuyenBay,HangVe,id)
+                list_ve.append(ve)
+            db.session.commit()
+            self.sendTicketByMail(list_ve)
+            return True
+        except exc.SQLAlchemyError:
+            db.session.rollback()
+            return False
+        
     
     def tongVe(self,Id_ChuyenBay):
         return len(Ve.query.filter(Ve.Id_ChuyenBay==Id_ChuyenBay).all())
@@ -124,27 +142,82 @@ class TicketController:
         for i in list:
             tongSoVe += self.tongVe(i.id)
         return tongSoVe    
+    
+    def listBangGiaVe(self):
+        return BangGiaVe.query.all()
+from flask import render_template, request, redirect, session, jsonify
 
+
+    
+
+
+    
 
 if(__name__=='__main__'):
-    #kh=KhachHang.query.filter(KhachHang.HoTenKH=='ten').first()
-    #print(type(kh.NamSinh))
+    data_kh={}
+    data_kh['HoTenKH']='hieu1'
+    data_kh['GioiTinh']='nam'
+    data_kh['NamSinh']='2001'
+    data_kh['SDT']='26'
+    data_kh['CMND']='26'
+    data_kh['Email']='19110362@student.hcmute.edu.vn'
+    data_kh['HinhAnh'] = None
+    list_kh=[]
+    list_kh.append(data_kh.copy())
+    data_kh['HoTenKH']='hieu dem2'
+    data_kh['GioiTinh']='nam'
+    data_kh['NamSinh']='2001'
+    data_kh['SDT']='27'
+    data_kh['CMND']='27'
+    data_kh['Email']='19110362@student.hcmute.edu.vn'
+    data_kh['HinhAnh'] = None
+    list_kh.append(data_kh.copy())
+    ticDAO =TicketController()
+    Id_ChuyenBay=1
+    HangVe='Thuong'
+    print(ticDAO.datNhieuVe(1,'Thuong',list_kh))
+    data_kh={}
+    data_kh['HoTenKH']='hieu1'
+    data_kh['GioiTinh']='nam'
+    data_kh['NamSinh']='2001'
+    data_kh['SDT']='28'
+    data_kh['CMND']='28'
+    data_kh['Email']='19110362@student.hcmute.edu.vn'
+    data_kh['HinhAnh'] = None
+    list_kh=[]
+    list_kh.append(data_kh.copy())
+    data_kh['HoTenKH']='hieu dem2'
+    data_kh['GioiTinh']='nam'
+    data_kh['NamSinh']='2001'
+    data_kh['SDT']='29'
+    data_kh['CMND']='29'
+    data_kh['Email']='19110362@student.hcmute.edu.vn'
+    data_kh['HinhAnh'] = None
+    list_kh.append(data_kh.copy())
+    ticDAO =TicketController()
+    Id_ChuyenBay=1
+    HangVe='Thuong'
+    print(ticDAO.datNhieuVe(1,'Thuong',list_kh))
     
-    #ve = Ve.query.get(1)
-    #sendTicket(ve)
-   # chuyen = ChuyenBay.query.get(1)
-   # print(dir(chuyen))
-    #sanBay = SanBay(TenSB='h',DiaChi='h')
-   # db.session.add(sanBay)
-    #lay = SanBay.query.filter_by(TenSB='h').first()
-    #print(lay.id)
-    
-    #kh = KhachHang(
-         ##         HoTenKH=data[0],GioiTinh =data[0],NamSinh =data[0]
-             #      ,SDT =data[0], CMND =data[0],HinhAnh=data[0],Email = data[0])
-             
-    #data = ['ten','name','2021-10-23','30003','40005',null,'19110362@student.hcmute.edu.vn']
-    #print(nhapThongTinKhachHang(data))
-    #nhapThongTinKhachHang()
-    #print(TongThanhToan(1,'Thuong',2))
-    print(TicketController().checkQuyDinh(9))
+    #print(ticDAO.datVe(1,'Thuong',26))
+    khDAO = KhachHangController()
+    #print(khDAO.insert(data_kh))
+    #db.session.commit()
+    '''
+    with app.app_context():
+        msg = Message(subject="Ve may bay gia re",
+            sender=app.config.get("MAIL_USERNAME"),
+            recipients=['19110362@student.hcmute.edu.vn'],
+            body='test1')
+        mail.send(msg)
+    with app.app_context():
+        msg = Message(subject="Ve may bay gia re",
+            sender=app.config.get("MAIL_USERNAME"),
+            recipients=['19110362@student.hcmute.edu.vn'],
+            body='test2')
+        mail.send(msg)
+    '''
+    ve1= Ve.query.get(24)
+    ve2=Ve.query.get(25)
+    #print(ticDAO.sendTicketByMail([ve1,ve2]))
+    #print(ticDAO.sendTicketByMail([ve1,ve2]))

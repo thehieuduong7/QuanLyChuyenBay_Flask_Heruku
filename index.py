@@ -7,7 +7,7 @@ from flask_login import login_user
 import utils
 from datetime import datetime, date
 import math
-
+from ControllerTicket import TicketController
 @my_login.user_loader
 #Bỏ cả đối tượng vào biến current_user
 def user_load(user_id):
@@ -111,16 +111,33 @@ def normaluer_forget_password():
 def list_ve():
     if current_user.VaiTro == "N":
         return render_template("list-ve.html")
-@app.route("/ban-ve")
-def ban_ve():
+@app.route("/ban-ve/<id_cb>/<hang>/<int:soluong>")
+def ban_ve(id_cb,hang,soluong):
     if current_user.VaiTro == "N":
-        return render_template("banve.html")
+        soluong=int(soluong)
+        id_cb=int(id_cb)
+        return render_template("banve.html",
+                number_kh=soluong,id_chuyenBay=id_cb,hangVe=hang)
 
-@app.route("/ban-ve-copy")
-def ban_ve_cop():
-    number_kh = request.args.get("number_kh")
-    number_kh=int(number_kh)
-    return render_template("banve copy.html",number_kh=number_kh)
+
+@app.route("/mua-ve/<id_cb>/<hang>/<int:soluong>",methods=['Post'])
+def banVePost(id_cb,hang,soluong):
+    if current_user.VaiTro == "N":
+        list_kh=[]
+        veDAO = TicketController()
+        for i in range(1,int(soluong)+1):
+            data_kh={}
+            data_kh['HoTenKH']=request.form.get('HoTenKH'+str(i))
+            data_kh['GioiTinh']=request.form.get('GioiTinh'+str(i))
+            data_kh['NamSinh']=request.form.get('NamSinh'+str(i))
+            data_kh['SDT']=request.form.get('SDT'+str(i))
+            data_kh['CMND']=request.form.get('CMND'+str(i))
+            data_kh['Email']=request.form.get('Email'+str(i))
+            data_kh['HinhAnh'] = request.files['HinhAnh'+str(i)]
+            list_kh.append(data_kh.copy())
+        if(veDAO.datNhieuVe(id_cb,hang,list_kh)==True):
+            return 'done',301
+    return 'Faile'
 @app.route("/nhan-lich")
 def nhan_lich():
     if current_user.VaiTro == "N":
