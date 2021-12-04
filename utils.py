@@ -94,7 +94,12 @@ def get_ve(ve):
         return
 
 def check_ve(ve):
-    time = ChuyenBay.query.filter(ChuyenBay.id==ve.Id_ChuyenBay, ChuyenBay.ThoiGianXuatPhat.__gt__(datetime.now()+timedelta(days=+1))).first()
+    quy_dinh = QuyDinh.query.filter(QuyDinh.QuyDinh=="TGDatVeTreNhat").first()
+    if quy_dinh:
+        day = int(quy_dinh.NoiDung)
+        time = ChuyenBay.query.filter(ChuyenBay.id==ve.Id_ChuyenBay, ChuyenBay.ThoiGianXuatPhat.__gt__(datetime.now()+timedelta(days=+day))).first()
+    else:
+        time = ChuyenBay.query.filter(ChuyenBay.id==ve.Id_ChuyenBay, ChuyenBay.ThoiGianXuatPhat.__gt__(datetime.now()+timedelta(days=+1))).first()
     if time:
         return true
     return false

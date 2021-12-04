@@ -19,8 +19,8 @@
                 <th class="goods-page-ref-no">Chuyến Bay</th>
                 <th class="goods-page-description">Hạng vé</th>
                 <th class="goods-page-price">Giá Vé</th>
-                <th class="goods-page-ref-no" colspan="2">Thời gian khởi hành</th>
-                <th class="goods-page-ref-no" colspan="2">Thời gian đặt vé</th>
+                <th class="goods-page-ref-no">Thời gian khởi hành</th>
+                <th class="goods-page-ref-no">Thời gian đặt vé</th>
 
               </tr>
               {% for v in ve %}
@@ -54,7 +54,7 @@
                   <strong>{{v.ThoiGianDatVe}}</strong>
                 </td>
                 <td class="del-goods-col">
-                  <a class="btn btn-primary" href="/doi-tra-ve?ve={{v.id}}-{{v.khachhang.SDT}}-{{v.khachhang.id}}">Đổi</a>
+                  <a class="btn btn-primary" href="/doi-tra-ve?ve={{v.id}}-{{v.khachhang.SDT}}-{{v.khachhang.id}}"><p class="text-white">Đổi</p></a>
                 </td>
                 <td class="del-goods-col">
                   <button class="btn btn-primary" onclick="checkVe('{{v.id}}-{{v.khachhang.SDT}}-{{v.khachhang.id}}', 1, null, null)">Trả</button>
