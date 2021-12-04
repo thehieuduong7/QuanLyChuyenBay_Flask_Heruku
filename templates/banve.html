@@ -20,83 +20,156 @@
       <!-- BEGIN CONTENT -->
 
       <div class="col-md-6 col-sm-7 ">
-        <h1>Thông tin khách hàng</h1>         
-        <div class="content-form-page">
-          <form action="/mua-ve/{{id_chuyenBay}}/{{hangVe}}/{{number_kh}}" method="post" enctype="multipart/form-data" class="form-horizontal form-without-legend">
-            {%for i in range(1,number_kh+1)%}
-            <br>
-            {%if i==1%}
-            <div class = "alert alert-success">
-                Khách hàng chính
-             </div>
-            {%else%}
+        <h1>Thông tin khách hàng</h1>
+        <!-- {% if not err_msg %}
               <div class = "alert alert-success">
-                Khách hàng phụ thứ {{i-1}}
+               Thông báo nhập thành công {{ err_msg }}
               </div>
-            {%endif%}
+        {% endif %} -->
+
+        <div class="content-form-page">
+
+          {%for i in range(1,number_kh+1)%}
+          <br>
+          {%if i==1%}
+          <div class = "alert alert-success">
+              Khách hàng chính
+           </div>
+          {%else%}
+            <div class = "alert alert-success">
+              Khách hàng phụ thứ {{i-1}}
+            </div>
+          {%endif%}
+          <form role="form" class="form-horizontal form-without-legend">
             <div class="form-group">
               <label class="col-lg-2 control-label" for="first-name">Họ & Tên <span class="require">*</span></label>
               <div class="col-lg-8">
-                <input type="text" id="HoTenKH" name = "HoTenKH{{i}}" class="form-control text-dark" required>
+                <input type="text" id="hoten" name = "hoten" class="form-control" required>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-lg-2 control-label" for="NamSinh">Năm Sinh <span class="require">*</span></label>
+              <label class="col-lg-2 control-label" for="email">Năm Sinh <span class="require">*</span></label>
               <div class="col-lg-8">
-                <input type="number" id="namsinh" name = "NamSinh{{i}}" class="form-control text-dark" required>
+                <input type="number" id="namsinh" name = "namsinh" class="form-control" required>
               </div>
             </div>
             <div class="form-group">
               <label class="col-lg-2 control-label" for="last-name">Giới Tính <span class="require">*</span></label>
               <div class="col-lg-8">
                 <label>
-                  <input type="radio" class="form-check-input" name = "GioiTinh{{i}}" value="Nam"> Nam
+                  <input type="radio" id="gioitinh" name = "gioitinh"> Nam
                 </label>
                 <label>
-                  <input type="radio" class="form-check-input" name="GioiTinh{{i}}" value="Nu"> Nữ 
+                  <input type="radio" id="gioitinh" name="gioitinh"> Nữ 
                 </label>
               </div>
             </div>
             <div class="form-group">
               <label class="col-lg-2 control-label" for="email">E-Mail <span class="require">*</span></label>
               <div class="col-lg-8">
-                <input type="email" id="Email" name = "Email{{i}}" class="form-control text-dark" required>
+                <input type="email" id="email" name = "email" class="form-control" required>
               </div>
             </div>
             <div class="form-group">
               <label class="col-lg-2 control-label" for="telephone">SĐT<span class="require">*</span></label>
               <div class="col-lg-8">
-                <input type="text" id="SDT" name="SDT{{i}}" class="form-control text-dark" required>
+                <input type="number" id="sdt" name="sdt" class="form-control" required>
               </div>
             </div>
             <div class="form-group">
               <label class="col-lg-2 control-label" for="fax">CMND<span class="require">*</span></label>
               <div class="col-lg-8">
-                <input type="text" id="CMND" name = "CMND{{i}}" class="form-control text-dark" required>
+                <input type="number" id="cmnd" name = "cmnd" class="form-control" required>
               </div>
             </div>
             <div class="form-group">
               <label class="col-lg-2 control-label">Hình ảnh</label>
               <div class="col-lg-8">
-                <input type="file" id = "HinhAnh{{i}}" name="HinhAnh{{i}}">
+                <input type="file" id = "hinhanh" name="hinhanh">
               </div>
             </div>  
             {%endfor%}
-          <button type="submit" class="btn btn-primary">Lưu</button>
+          </div>
+        
+      </div>
+      <!-- END CONTENT -->
+   
+
+      <div class="col-md-4 col-sm-4">
+        <h1>Thông tin vé</h1>
+        <br></br>
+        <div class="content-form-page">
+          <div class="form-group">
+            <label class="col-md-4 control-label">Số lượng vé</label>
+            <div class="col-lg-8">
+              <input type="number" id="soluong" name = "soluong" class="form-control" required>
+            </div>
+          </div>
+
+          <br></br>
+          <div class="form-group">
+            <label class="col-md-4 control-label">Hạng vé</label>
+            <div class="col-md-8">
+              <select class="form-control">
+                <option>Option 1</option>
+                <option>Option 2</option>
+              </select>
+            </div>
+          </div>
+
+          <br></br>
+          <h1>Chuyến bay</h1>
+          <div class="form-group">
+            <label class="col-md-6 control-label">Nơi đi: </label>
+            <div class="col-md-4">
+              <p>HCM</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-6 control-label">Nơi đến: </label>
+            <div class="col-md-4">
+              <p>HCM</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-6 control-label">Thời gian bay: </label>
+            <div class="col-md-4">
+              <p>3</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-6 control-label">Thời gian xuất phát: </label>
+            <div class="col-md-4">
+              <p>3</p>
+            </div>
+          </div>
+            <!-- <div class="form-group">
+              <label class="col-lg-2 control-label">Checkboxes</label>
+              <div class="col-lg-8 checkbox-list">
+                <label>
+                  <input type="checkbox"> Checkbox 1
+                </label>
+                <label>
+                  <input type="checkbox"> Checkbox 2
+                </label>
+                <label>
+                  <input type="checkbox" disabled> Disabled
+                </label>
+              </div>
+            </div> -->
+            
+            <div class="row">
+              <div class="col-lg-8 col-md-offset-2 padding-left-0 padding-top-20">
+                <button class="btn btn-primary" type="submit">Đặt Vé</button>
+                <button type="reset" class="btn btn-default">Nhập Lại</button>
+              </div>
+            </div>
           </form>
         </div>
       </div>
-      <!-- END CONTENT -->
-      <div class="col-md-2 col-sm-5 ">
-        <button class="btn btn-primary" type="submit">Đặt Vé</button>
-        <button type="reset" class="btn btn-default">Nhập Lại</button>
-      </div>
-
-
     </div>
     <!-- END SIDEBAR & CONTENT -->
   </div>
 </div>
-
 {% endblock %}
   

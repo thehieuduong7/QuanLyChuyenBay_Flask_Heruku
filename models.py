@@ -66,7 +66,6 @@ class BangGiaVe(db.Model):
     SoGhe = Column(Integer, nullable=True)
     __table_args__ = (db.UniqueConstraint(Id_ChuyenBay, HangVe),)
 
-
 class DoanhThuThang(db.Model):
     __tablename__ = 'DoanhThuThang'
     id = Column(Integer, primary_key=True, autoincrement=True)
