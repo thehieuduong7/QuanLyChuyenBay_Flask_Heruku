@@ -58,19 +58,21 @@
                     <img class="img-responsive" alt="" src="/static/images/ChuyenBay.jpg">
                 </div>
                 <div class="col-md-8 col-sm-8">
-                    <h2><a>Chuyến bay từ {{ f.sanbay_di.DiaChi }} đến {{ f.sanbay_den.DiaChi }}</a></h2>
+                    <h2><a href="" onclick="this.href='/dat-ve-online?hangve='
+                        +document.getElementById('mySelect').value+
+                        '&soluong='+document.getElementById('soluong').value+
+                        '&idchuyenbay={{ f.id }}'">Chuyến bay từ {{ f.sanbay_di.DiaChi }} đến {{ f.sanbay_den.DiaChi }}</a></h2>
                     <ul class="blog-info">
                     <li><i class="fa fa-calendar"></i> {{ f.ThoiGianXuatPhat }}</li>
                     <li><i class="fa fa-comments"></i> {{ f.ThoiGianBay }} phút</li>
                     <li><i class="fa fa-tags"></i> {{ f.maybay.Ten }}</li>
                     </ul>
-                    <p>Đi từ sân bay {{ f.sanbay_di.TenSB}} đến sân bay {{ f.sanbay_den.TenSB}} | Giá chỉ từ {{ f.banggia.GiaVe }} </p> 
+                    <p>Đi từ sân bay {{ f.sanbay_di.TenSB}} đến sân bay {{ f.sanbay_den.TenSB}} </p> 
                     {% for v in f.banggia %}
                     {% if v.HangVe == "Thường" %}
                         <p>| Giá chỉ từ {{ v.GiaVe }} VND</p>
                     {% endif %}
                     {% endfor %}
-                    {% if current_user.VaiTro == "K" %}
                     <div class="row">
                         <div class="col-md-4">
                             <input type="number" name="soluong" id="soluong" class="form-control" placeholder="Nhập số lượng vé">
@@ -90,27 +92,7 @@
                            '&idchuyenbay={{ f.id }}'"><button type="button" class="btn btn-primary">Đặt Vé</button></a>
                         </div>
                     </div>
-                    {% elif current_user.VaiTro == "N" %}
-                    <div class="row">
-                        <div class="col-md-4">
-                            <input type="number" name="soluong" id="soluong" class="form-control" placeholder="Nhập số lượng vé" value=1>
-                        </div>
-                        <div class="col-md-5 padding-left-0">
-                            <select class="form-control" id="mySelect">
-                                <option>------Chọn một hạng vé------</option>
-                                {% for v in f.banggia %}
-                                <option>{{v.HangVe}}</option>
-                              {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-2 padding-left-0">
-                            <a href="" onclick="this.href='/ban-ve?hangve='
-                            +document.getElementById('mySelect').value+
-                            '&soluong='+document.getElementById('soluong').value+
-                            '&idchuyenbay={{ f.id }}'"><button type="button" class="btn btn-primary">Bán Vé</button></a>
-                        </div>
-                    </div>
-                    {% endif %}
+                    
                     
                 </div>
             </div>
