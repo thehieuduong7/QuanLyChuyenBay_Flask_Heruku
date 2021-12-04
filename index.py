@@ -18,13 +18,19 @@ def home():
     quy_dinh = utils.get_quydinh() 
     size = app.config["PAGE_SIZE"]
     index = request.args.get("page")
+    san_bay_di = utils.get_san_bay_by_id(request.args.get("san-bay"))
     if index:
         index = int(index)
     else:
         index = 1
-    flights = utils.get_flight(noi_di=request.args.get("noidi"),
+    
+    if san_bay_di:
+        flights = utils.get_flight_by_san_bay(san_bay=san_bay_di)
+    else:
+        flights = utils.get_flight(noi_di=request.args.get("noidi"),
                                 noi_den=request.args.get("noiden"),
                                 time=request.args.get("time"))
+    
     count = utils.count_flights(flights)
     flights = utils.paging(flights, index)
     
@@ -155,16 +161,69 @@ def list_khach():
 @app.route("/info-ve")
 def info_ve():
     if current_user.VaiTro == "K":
-        return render_template("info-ve.html")
+        ve = utils.ve_da_mua(request.args.get("id"))
+        return render_template("info-ve.html", ve=ve)
 @app.route("/dat-ve-online")
 def dat_ve_online():
     if current_user.is_authenticated:
         return render_template("dat-ve-online.html")
 
-# Khách hàng & Nhân viên
-@app.route("/doi-ve")
-def doi_ve():
-    if current_user.is_authenticated:
-        return render_template("doi-ve.html")
+@app.route("/api/check-ve/<id_ve>", methods=['post'])
+def check_ve(id_ve):
+    ve = utils.get_ve(id_ve)
+    if ve:
+        if utils.check_ve(ve)==true:
+            return jsonify({
+                "error_code": 200
+            })
+    return jsonify({
+        "error_code": 404
+    })
+    #if current_user.is_authenticated:
+        #return render_template("doi-ve.html")
+@app.route("/doi-tra-ve")
+def doi_tra_ve():
+    sanbay = utils.get_all_san_bay()
+    noi_di=request.args.get("noidi")
+    noi_den=request.args.get("noiden")
+    time=request.args.get("time")
+    flights = None
+    if noi_den and noi_di and time:
+        flights = utils.get_flight(noi_di=noi_di,
+                                noi_den=noi_den,
+                                time=time)
+    return render_template("doi-tra-ve.html", sanbay=sanbay,
+                                            flights=flights,
+                                            ve=request.args.get("ve"))
+
+@app.route("/api/doi-ve/<id_ve>", methods=['put'])
+def doi_ve(id_ve):
+    ve = utils.get_ve(id_ve)
+    data = request.json
+    id_chuyen_bay = str(data['id_chuyen_bay'])
+    hang_ve = str(data['hang_ve'])
+    if utils.doi_ve(ve=ve, id_chuyen_bay=id_chuyen_bay, hang_ve=hang_ve)==true:
+        return jsonify({
+            "error_code": 200
+        })
+    return jsonify({
+        "error_code": 400
+    })
+    #if current_user.is_authenticated:
+        #return render_template("doi-ve.html")
+
+@app.route("/api/tra-ve/<id_ve>", methods=['delete'])
+def tra_ve(id_ve):
+    #data = request.args.get('ve')
+    #data = request.json
+    #id_ve = str(data['id_ve'])
+    ve = utils.get_ve(id_ve)
+    if utils.xoa_ve(ve)==true:
+        return jsonify({
+            "error_code": 200
+        })
+    return jsonify({
+        "error_code": 400
+    })
 if __name__ == '__main__':
     app.run(debug=True)

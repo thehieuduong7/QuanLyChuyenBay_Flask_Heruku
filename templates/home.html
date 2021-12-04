@@ -8,6 +8,7 @@
   </ul>
   <!-- BEGIN SIDEBAR & CONTENT -->
   <div class="row margin-bottom-40">
+      
       <!-- BEGIN CONTENT -->
       <div class="col-md-12 col-sm-12">
       <h1>Danh Sách Chuyến Bay</h1>
@@ -35,7 +36,7 @@
                     <div class="form-group col-md-5">
                         <label class="col-lg-4 control-label padding-left-0 padding-right-0">Thời Gian Xuất Phát: </label>
                         <div class="col-lg-8">
-                            <input type="datetime-local" id="time" name = "time" class="form-control">
+                            <input type="datetime-local" id="time" name = "time" class="form-control" required>
                         </div>
                     </div>
                         <button class="btn btn-primary" type="submit">Tìm Kiếm</button>
@@ -64,7 +65,11 @@
                     <li><i class="fa fa-tags"></i> {{ f.maybay.Ten }}</li>
                     </ul>
                     <p>Đi từ sân bay {{ f.sanbay_di.TenSB}} đến sân bay {{ f.sanbay_den.TenSB}} | Giá chỉ từ {{ f.banggia.GiaVe }} </p> 
-
+                    {% for v in f.banggia %}
+                    {% if v.HangVe == "Thường" %}
+                        <p>| Giá chỉ từ {{ v.GiaVe }} VND</p>
+                    {% endif %}
+                    {% endfor %}
                     {% if current_user.VaiTro == "K" %}
                     <div class="row">
                         <div class="col-md-4">
@@ -73,8 +78,9 @@
                         <div class="col-md-5 padding-left-0">
                             <select class="form-control" id="mySelect">
                                 <option>------Chọn một hạng vé------</option>
-                                <option>option 1</option>
-                                <option>option 2</option>
+                                {% for v in f.banggia %}
+                                <option>{{v.HangVe}}</option>
+                              {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-2 padding-left-0">
@@ -92,8 +98,9 @@
                         <div class="col-md-5 padding-left-0">
                             <select class="form-control" id="mySelect">
                                 <option>------Chọn một hạng vé------</option>
-                                <option>option 1</option>
-                                <option>option 2</option>
+                                {% for v in f.banggia %}
+                                <option>{{v.HangVe}}</option>
+                              {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-2 padding-left-0">
@@ -128,37 +135,15 @@
           <div class="col-md-3 col-sm-3 blog-sidebar">
                 <br></br>       
               <!-- CATEGORIES START -->
-              <h2 class="no-top-space">Phân Loại</h2>
+              <h2 class="no-top-space">Các chuyến bay theo sân bay đi</h2>
               <ul class="nav sidebar-categories margin-bottom-40">
-
-                <li><a href="#">London (18)</a></li>
-
+                {% for s in sanbay%}
+                <li><a href="/?san-bay={{ s.id }}">{{ s.DiaChi }}: {{ count_flight_by_san_bay(s.id) }}</a></li>
+                {% endfor %}
               </ul>
               <!-- CATEGORIES END -->
 
-              <!-- BEGIN RECENT NEWS -->                            
-              <h2>Chuyến Bay Mới</h2>
-              {% for flight in newest_flight %}
-              <div class="recent-news margin-bottom-10">
-              <div class="row margin-bottom-10">
-                  <div class="col-md-3">
-                  <img class="img-responsive" alt="" src="/static/images/ChuyenBay.jpg">                        
-                  </div>
-                  <div class="col-md-9 recent-news-inner">
-                  <h3><a href="">Chuyến bay từ {{flight.sanbay_di.DiaChi }} đến {{flight.sanbay_den.DiaChi }}</a></h3>
-                  <ul class="blog-info">
-                    <li><i class="fa fa-calendar"></i> {{ flight.ThoiGianXuatPhat }}</li>
-                    <li><i class="fa fa-comments"></i> {{ flight.ThoiGianBay }} phút</li>
-                    <li><i class="fa fa-tags"></i> {{ flight.maybay.Ten }}</li>
-                    </ul>
-                    <p>Đi từ sân bay {{ flight.sanbay_di.TenSB}} đến sân bay {{ flight.sanbay_den.TenSB}}</p>
-                    <p>Giá chỉ từ {{ flight.banggia.GiaVe }}</p>
-                  </div>                        
-              </div>
-              
-              </div>
-              {% endfor %}
-              <!-- END RECENT NEWS -->                            
+                                      
 
               <!-- BEGIN BLOG TALKS -->
               <div class="blog-talks margin-bottom-30">
@@ -232,4 +217,9 @@
   <!-- END SIDEBAR & CONTENT -->
   </div>
 </div>
+<script>
+    function myFunction() {
+      alert('Trả thành công');
+    }
+</script>
 {% endblock %}
