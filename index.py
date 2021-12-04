@@ -163,7 +163,29 @@ def nhan_lich():
 @app.route("/list-khach")
 def list_khach():
     if current_user.VaiTro == "N":
-        return render_template("list-khachhang.html")
+        hoten = request.args.get("hoten")
+        namsinh = request.args.get("namsinh")
+        sdt = request.args.get("sodienthoai")
+        cmnd = request.args.get("cmnd")
+        email = request.args.get("email")
+        page = int(request.args.get("page", 1))
+        
+        count = utils.count_khach()
+
+        all_khach = utils.get_allkhach(cmnd=cmnd, 
+                                    hoten=hoten,
+                                    email=email,
+                                    namsinh=namsinh,
+                                    sdt=sdt,
+                                    page=page)
+
+        return render_template("list-khachhang.html", khach = all_khach,
+                                                        cmnd = cmnd,
+                                                        namsinh = namsinh,
+                                                        sdt = sdt,
+                                                        email = email,
+                                                        hoten = hoten,
+                                                        pagenum = math.ceil(count/5))   
 
 # Khách hàng's
 @app.route("/info-ve")

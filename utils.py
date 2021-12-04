@@ -163,3 +163,31 @@ def ve_da_mua(id):
     # else:
     #     return
     
+def count_khach():
+    return KhachHang.query.count()
+
+def get_allkhach(page= None, 
+                hoten = None, 
+                namsinh = None,
+                sdt = None,
+                cmnd = None,
+                email = None):
+    khach = KhachHang.query
+
+    if hoten:
+        khach = khach.filter(KhachHang.HoTenKH.contains(hoten))
+    if namsinh:
+        khach = khach.filter(KhachHang.NamSinh==namsinh)
+    if sdt:
+        khach = khach.filter(KhachHang.SDT==sdt)
+    if cmnd:
+        khach = khach.filter(KhachHang.CMND==cmnd)
+    if email:
+        khach = khach.filter(KhachHang.Email==email)
+
+    if page:
+        size = 5
+        start = (page-1)*size
+        end = start + size
+        return khach.all()[start:end]
+    return khach.all()

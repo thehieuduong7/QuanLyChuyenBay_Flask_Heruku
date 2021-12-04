@@ -138,12 +138,10 @@
               <h2 class="no-top-space">Các chuyến bay theo sân bay đi</h2>
               <ul class="nav sidebar-categories margin-bottom-40">
                 {% for s in sanbay%}
-                <li><a href="/?san-bay={{ s.id }}">{{ s.DiaChi }}: {{ count_flight(s.id|int) }}</a></li>
+                    <li><a href="/?san-bay={{ s.id }}">{{ s.DiaChi }}: {{ count_flight(s.id|int) }}</a></li>
                 {% endfor %}
               </ul>
               <!-- CATEGORIES END -->
-
-                                      
 
               <!-- BEGIN BLOG TALKS -->
               <div class="blog-talks margin-bottom-30">

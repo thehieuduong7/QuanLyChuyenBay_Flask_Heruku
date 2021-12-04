@@ -58,47 +58,45 @@
                 <th class="goods-page-ref-no">Năm sinh</th>
                 <th class="goods-page-ref-no">Số điện thoại</th>
                 <th class="goods-page-ref-no">CMND</th>
-                <th class="goods-page-ref-no">Email</th>
-                
+                <th class="goods-page-ref-no">Email</th>  
               </tr>
+
+              {% for k in khach %}
               <tr>
                 <td class="goods-page-image">
-                  <a href="#"><img src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/products/model3.jpg') }}" alt="Berry Lace Dress"></a>
+                  <a href=""><img src="{{ k.HinhAnh }}" alt="Berry Lace Dress"></a>
                 </td>
                 <td class="goods-page-description">
-                  <h3><a href="#">Họ Tên</a></h3>
-                  <p><strong>Giới tính</strong> Nam</p>
+                  <h3><a href="">{{ k.HoTenKH }}</a></h3>
+                  <p><strong>Giới tính: </strong>{{ k.GioiTinh }}</p>
               
                 </td>
                 <td class="goods-page-ref-no">
-                  <strong style = "font-size: large;">2001</strong>
+                  <strong style = "font-size: large;">{{ k.NamSinh }}</strong>
                 </td>
                 <td class="goods-page-quantity">
-                  <strong style = "font-size: large;">123456789</strong>
+                  <strong style = "font-size: large;">{{ k.SDT }}</strong>
                 </td>
                 <td class="goods-page-price">
-                  <strong>123456789</strong>
+                  <strong>{{ k.CMND }}</strong>
                 </td>
                 <td class="goods-page-total">
-                  <strong>myemail@gmail.com</strong>
+                  <strong>{{ k.Email }}</strong>
                 </td>
                 <td class="del-goods-col">
                   <a class="del-goods" href="#">&nbsp;</a>
                 </td>
               </tr>
-              
+              {% endfor %}
+
             </table>
             </div>
               
             <hr class="blog-post-sep">
               <ul class="pagination">
-              <li><a href="#">Prev</a></li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li class="active"><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#">Next</a></li>
+                {% for i in range(1, pagenum+1) %}
+                <li><a href="/list-khach?page={{ i }}">{{ i }}</a></li>
+                {% endfor %}
               </ul>     
             <!-- <div class="shopping-total">
               <ul>
