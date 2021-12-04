@@ -111,41 +111,141 @@ def normaluer_forget_password():
 def list_ve():
     if current_user.VaiTro == "N":
         return render_template("list-ve.html")
-@app.route("/ban-ve/<id_cb>/<hang>/<int:soluong>")
+@app.route("/ban-ve/<id_cb>/<hang>/<int:soluong>",methods=['Post','Get'])
 def ban_ve(id_cb,hang,soluong):
     if current_user.VaiTro == "N":
         soluong=int(soluong)
         id_cb=int(id_cb)
-        return render_template("banve.html",
-                number_kh=soluong,id_chuyenBay=id_cb,hangVe=hang)
+        cb= ChuyenBay.query.get(id_cb)
+        if(request.method=='GET'):
+            if(not cb): return 'không tìm thấy chuyến bay'
+            return render_template("banve.html",
+                    number_kh=soluong,chuyenBay=cb,hangVe=hang)
+        else:
+            list_kh=[]
+            veDAO = TicketController()
+            for i in range(1,int(soluong)+1):
+                data_kh={}
+                data_kh['HoTenKH']=request.form.get('HoTenKH'+str(i))
+                data_kh['GioiTinh']=request.form.get('GioiTinh'+str(i))
+                data_kh['NamSinh']=request.form.get('NamSinh'+str(i))
+                data_kh['SDT']=request.form.get('SDT'+str(i))
+                data_kh['CMND']=request.form.get('CMND'+str(i))
+                data_kh['Email']=request.form.get('Email'+str(i))
+                data_kh['HinhAnh'] = request.files['HinhAnh'+str(i)]
+                list_kh.append(data_kh.copy())
+            
+            mess="success"  
+            contentMess="Bán vé thành công!!! vui lòng kiểm tra gmail!!!"
+            
+            result= veDAO.BanVeNhieuVe(id_cb,hang,list_kh)
+            if(result!=True):
+                mess="error"
+                contentMess=result
+            cb= ChuyenBay.query.get(id_cb)
+            return render_template("banve.html",
+                    number_kh=soluong,chuyenBay=cb,hangVe=hang,mess=mess,contentMess=contentMess)
+
+    return 'faile'
 
 
-@app.route("/mua-ve/<id_cb>/<hang>/<int:soluong>",methods=['Post'])
-def banVePost(id_cb,hang,soluong):
-    if current_user.VaiTro == "N":
-        list_kh=[]
-        veDAO = TicketController()
-        for i in range(1,int(soluong)+1):
-            data_kh={}
-            data_kh['HoTenKH']=request.form.get('HoTenKH'+str(i))
-            data_kh['GioiTinh']=request.form.get('GioiTinh'+str(i))
-            data_kh['NamSinh']=request.form.get('NamSinh'+str(i))
-            data_kh['SDT']=request.form.get('SDT'+str(i))
-            data_kh['CMND']=request.form.get('CMND'+str(i))
-            data_kh['Email']=request.form.get('Email'+str(i))
-            data_kh['HinhAnh'] = request.files['HinhAnh'+str(i)]
-            list_kh.append(data_kh.copy())
-        if(veDAO.datNhieuVe(id_cb,hang,list_kh)==True):
-            return 'done',301
-    return 'Faile'
 @app.route("/nhan-lich")
 def nhan_lich():
     if current_user.VaiTro == "N":
         listAllMB = MayBay.query.all()
         listAllSB=SanBay.query.all()
-        print(listAllMB)
+        quyDinhDAO = QuyDinhController()
+        minBay= quyDinhDAO.ThoiGianBayToiThieu().NoiDung
+        soTG = quyDinhDAO.SoSanBayTrungGianToiDa().NoiDung
+        minDung=quyDinhDAO.ThoiGianDungToiThieu().NoiDung
+        maxDung=quyDinhDAO.ThoiGianDungToiDa().NoiDung
         return render_template("nhanlichchuyenbay.html",listAllMB=listAllMB,
-                               listAllSB=listAllSB)
+                               listAllSB=listAllSB,
+                        minBay=minBay,soTG=soTG,minDung=minDung,maxDung=maxDung)
+        
+def checkInputDataNhanLich(data):
+    Id_MayBay=data['Id_MayBay']
+    Id_SanBay_Di=data['Id_SanBay_Di']
+    Id_SanBay_Den=data['Id_SanBay_Den']
+    ThoiGianXuatPhat=data['ThoiGianXuatPhat']
+    ThoiGianBay=data['ThoiGianBay']
+    SoLuongChoNgoi=data['SoLuongChoNgoi']
+    if(Id_SanBay_Den==Id_SanBay_Di): return "Trùng sân bay"
+
+    ListTrungGian = data['ListTrungGian']
+    for trungGian in ListTrungGian:
+        if(trungGian["Id_SanBay"]==Id_SanBay_Di or
+           trungGian["Id_SanBay"]==Id_SanBay_Den): return "Trùng sân bay"
+        
+        
+    ListHangVe = data['ListHangVe']
+    sumSoVe=0
+    for hangVe in ListHangVe:
+        sumSoVe+= int(hangVe['SoGhe'])
+    if(sumSoVe>SoLuongChoNgoi):
+        return "Số lượng vé nhiều hơn số chỗ ngồi"
+    return 'success'
+    
+@app.route("/nhan-lich-post",methods=['Post'])
+def nhan_lich_post():
+    if current_user.VaiTro == "N":
+        data={}
+        Id_MayBay = request.form.get('Id_MayBay')
+        Id_SanBay_Di = int(request.form.get('Id_SanBay_Di'))
+        Id_SanBay_Den= int(request.form.get('Id_SanBay_Den'))
+        ThoiGianXuatPhat= request.form.get('ThoiGianXuatPhat')
+        ThoiGianBay= int(request.form.get('ThoiGianBay'))
+        SoLuongChoNgoi= int(request.form.get('SoLuongChoNgoi'))
+        listId_SanBayTG = request.form.getlist('TrungGian-select')
+        listthoiGianDung=request.form.getlist('thoiGianDung')
+        listChuThich=request.form.getlist('ChuThich-text')
+        listhangVe= request.form.getlist('hangVe-text')
+        listgiaVe= request.form.getlist('giaVe-text')
+        listsoShe= request.form.getlist('soGhe-text')
+        data['Id_MayBay']=Id_MayBay
+        data['Id_SanBay_Di']=Id_SanBay_Di
+        data['Id_SanBay_Den']=Id_SanBay_Den
+        data['ThoiGianXuatPhat']=ThoiGianXuatPhat
+        data['ThoiGianBay']=ThoiGianBay
+        data['SoLuongChoNgoi']=SoLuongChoNgoi
+        data['ListTrungGian']=[]
+        data['ListHangVe']=[]
+  
+        for i in range(len(listId_SanBayTG)):
+            trungGian ={}
+            trungGian['Id_SanBay']=int(listId_SanBayTG[i])
+            trungGian['ThoiGianDung']=int(listthoiGianDung[i])
+            trungGian['GhiChu']=listChuThich[i]
+            data['ListTrungGian'].append(trungGian.copy())
+        for i in range(len(listhangVe)):
+            bangGia ={}
+            bangGia['HangVe']=listhangVe[i]
+            bangGia['GiaVe']=float(listgiaVe[i])
+            bangGia['SoGhe']=int(listsoShe[i])
+            data['ListHangVe'].append(bangGia.copy())
+        
+        listAllMB = MayBay.query.all()
+        listAllSB=SanBay.query.all()
+        mess='success'
+        contentMess='Nhập chuyến bay thành công!!!'
+        
+        if(checkInputDataNhanLich(data)!='success'):
+            mess='error'
+            contentMess=checkInputDataNhanLich(data)
+            return render_template("nhanlichchuyenbay.html",listAllMB=listAllMB,
+                               listAllSB=listAllSB,mess=mess,
+                               contentMess=contentMess)
+            
+        nhapLichDAO = NhapLichController()
+        result = nhapLichDAO.nhapLich(data)
+        if(result!=True):
+            mess='error'
+            contentMess=result
+
+        return render_template("nhanlichchuyenbay.html",listAllMB=listAllMB,
+                               listAllSB=listAllSB,mess=mess,
+                               contentMess=contentMess)
+        
 @app.route("/list-khach")
 def list_khach():
     if current_user.VaiTro == "N":
@@ -156,10 +256,43 @@ def list_khach():
 def info_ve():
     if current_user.VaiTro == "K":
         return render_template("info-ve.html")
-@app.route("/dat-ve-online")
-def dat_ve_online():
+@app.route("/dat-ve-online/<int:id_cb>/<hang>/<int:soluong>",methods=['Get','Post'])
+def dat_ve_online(id_cb,hang,soluong):
     if current_user.is_authenticated:
-        return render_template("dat-ve-online.html")
+        soluong=int(soluong)
+        id_cb=int(id_cb)
+        cb= ChuyenBay.query.get(id_cb)
+        minDat = int(QuyDinhController().ThoiGianDatVeToiThieu().NoiDung)
+        if(request.method=='GET'):
+            if(not cb): return 'không tìm thấy chuyến bay'
+            return render_template("dat-ve-online.html",
+                number_kh=soluong,chuyenBay=cb,hangVe=hang,minDat=minDat)
+        else:
+            list_kh=[]
+            veDAO = TicketController()
+            for i in range(1,int(soluong)+1):
+                data_kh={}
+                data_kh['HoTenKH']=request.form.get('HoTenKH'+str(i))
+                data_kh['GioiTinh']=request.form.get('GioiTinh'+str(i))
+                data_kh['NamSinh']=request.form.get('NamSinh'+str(i))
+                data_kh['SDT']=request.form.get('SDT'+str(i))
+                data_kh['CMND']=request.form.get('CMND'+str(i))
+                data_kh['Email']=request.form.get('Email'+str(i))
+                data_kh['HinhAnh'] = request.files['HinhAnh'+str(i)]
+                list_kh.append(data_kh.copy())
+            
+            mess="success"  
+            contentMess="Bán vé thành công!!! vui lòng kiểm tra gmail!!!"
+            
+            result= veDAO.DatVeNhieuVe(id_cb,hang,list_kh)
+            if(result!=True):
+                mess="error"
+                contentMess=result
+            cb= ChuyenBay.query.get(id_cb)
+            return render_template("dat-ve-online.html",
+                    number_kh=soluong,chuyenBay=cb,hangVe=hang,mess=mess,contentMess=contentMess,
+                    minDat=minDat)
+    return 'faile',403   
 
 # Khách hàng & Nhân viên
 @app.route("/doi-ve")
