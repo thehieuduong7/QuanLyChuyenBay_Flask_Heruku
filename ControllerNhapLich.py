@@ -1,4 +1,6 @@
 from operator import and_
+from ControllerBangGiaVe import BangGiaVeController
+from ControllerNhapTrungGian import TrungGianController
 from ControllerQuyDinh import QuyDinhController
 from __init__ import db,app
 from models import *
@@ -11,23 +13,16 @@ def listSanBay():
     return SanBay.query.all().last()
 class NhapLichController():
     def checkQuyDinh(self,data):
-        ThoiGianBay=data['ThoiGianBay']
-        ListrungGian = data['ListrungGian']
-        quyDinhDAO =QuyDinhController()
-        minTimeBay = int(quyDinhDAO.ThoiGianBayToiThieu.NoiDung)
-        if(ThoiGianBay<minTimeBay): return False
-        
-        soLuongTrungGian = len(ListrungGian)
-        maxLen = int(quyDinhDAO.SoSanBayTrungGianToiDa().NoiDung)
-        if(maxLen<soLuongTrungGian): return False
-        
-        thoiGianDungMin = int(quyDinhDAO.ThoiGianDungToiThieu().NoiDung)
-        thoiGianDungMax = int(quyDinhDAO.ThoiGianDungToiDa().NoiDung)
 
-        for tg in ListrungGian:
-            if(tg['ThoiGianDung']<thoiGianDungMin or 
-               tg['ThoiGianDung']>thoiGianDungMax):
-                return False
+        ThoiGianBay=int(data['ThoiGianBay'])
+        
+        quyDinhDAO =QuyDinhController()
+        minTimeBay = int(quyDinhDAO.ThoiGianBayToiThieu().NoiDung)
+        if(ThoiGianBay<minTimeBay): return False
+        ListTrungGian = data['ListTrungGian']
+        trungGianDAO = TrungGianController()
+        if(not trungGianDAO.checkQuyDinh(ListTrungGian)):
+            return False
         return True
         
         
@@ -43,35 +38,36 @@ class NhapLichController():
         Id_SanBay_Den=Id_SanBay_Den,ThoiGianXuatPhat=ThoiGianXuatPhat,
         ThoiGianBay=ThoiGianBay,SoLuongChoNgoi=SoLuongChoNgoi)
         db.session.add(chuyenBay)
-        chuyenBay = ChuyenBay.query.order_by(ChuyenBay.id.desc()).first()
+        db.session.flush()
+        db.session.refresh(chuyenBay)
         return chuyenBay
     
     def nhapLich(self,data):
-        if(self.checkQuyDinh(data)==False): return False
-        ListrungGian = data['ListrungGian']
-        db.session.begin()
+        if(self.checkQuyDinh(data)==False): return "Nhập lịch lỗi!! Nhập sai quy định"
+        trungGianDAO = TrungGianController()
+        bangGiaDAo =BangGiaVeController()
+        ListTrungGian = data['ListTrungGian']
+        ListHangVe = data['ListHangVe']
         try:
             chuyenBay=self.insertChuyenBay(data)
-            for trungGian in ListrungGian:
+            for trungGian in ListTrungGian:
                 data['Id_ChuyenBay']=chuyenBay.id
                 data['Id_SanBay'] = trungGian['Id_SanBay']
                 data['ThoiGianDung'] = trungGian['ThoiGianDung']
                 data['GhiChu']=trungGian['GhiChu']
-                self.insertTrungGian(data)
+                trungGianDAO.insert(data.copy())
+            for hangVe in ListHangVe:
+                data['Id_ChuyenBay']=chuyenBay.id
+                data['HangVe'] = hangVe['HangVe']
+                data['GiaVe'] = hangVe['GiaVe']
+                data['SoGhe']=hangVe['SoGhe']
+                bangGiaDAo.insertBangGianVe(data.copy())
             db.session.commit()
             return True
         except exc.SQLAlchemyError:
             db.session.rollback()
-            return False
-    def insertTrungGian(self,data):
-        Id_SanBay = data['Id_SanBay']
-        Id_ChuyenBay = data['Id_ChuyenBay']
-        ThoiGianDung = data['ThoiGianDung']
-        GhiChu = data['GhiChu']
-        trungGian =TrungGianChuyenBay(Id_SanBay=Id_SanBay,
-                    Id_ChuyenBay=Id_ChuyenBay,ThoiGianDung=ThoiGianDung,
-                    GhiChu=GhiChu)
-        db.session.add(trungGian)
+            return 'Nhập lịch lỗi!!! Thông tin đã tồn tại'
+
         
     def timChuyenBayTheoThang(self,thang,nam):
         from calendar import monthrange

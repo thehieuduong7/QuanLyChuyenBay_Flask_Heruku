@@ -12,121 +12,275 @@
       <!-- BEGIN SIDEBAR -->
       <div class="sidebar col-md-3 col-sm-5">
         <ul class="list-group margin-bottom-25 sidebar-menu">
-          <li class="list-group-item clearfix"><a href="/list-ve"><i class="fa fa-angle-right"></i> Danh sách vé</a></li>
-          <li class="list-group-item clearfix"><a href="/list-khach"><i class="fa fa-angle-right"></i> Danh sách khách hàng</a></li>
           <li class="list-group-item clearfix"><a href="/"><i class="fa fa-angle-right"></i> Danh sách chuyến bay</a></li>
         </ul>
+        <div style="box-shadow: 0px 0px 4px #AAA;">
+          <span class='display-4' style="font-size: large; font-weight:bold;">Bảng quy định</span>
+
+          <ul class="list-group margin-bottom-25 sidebar-menu">
+            <li class="list-group-item">
+              <i class="fa fa-minus"></i><span style="font-weight: 600;">Thời gian bay tối thiểu(phút):</span>
+              {{minBay}}p
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-minus"></i><span style="font-weight: 600;">Số sân bay trung gian tối đa:</span>
+              {{soTG}}
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-minus"></i><span style="font-weight: 600;">Thời gian dừng tối thiểu(phút):</span>
+              {{minDung}}p
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-minus"></i><span style="font-weight: 600;">Thời gian dừng tối đa(phút):</span>
+              {{maxDung}}p
+            </li>
+          </ul>
+        </div>
+        
+  
       </div>
       <!-- END SIDEBAR -->
-
-      <!-- BEGIN CONTENT -->
       <div class="col-md-9 col-sm-7">
-        <h1>Nhập thông tin chuyến bay</h1>
-        {% if not err_msg %}
-              <div class = "alert alert-success">
-               Thông báo nhập thành công {{ err_msg }}
-              </div>
-        {% endif %}
-        <div class="content-form-page">
-          <form role="form" class="form-horizontal form-without-legend">
-            
-            <div class="form-group">
-              <label class="col-md-2 control-label">Máy Bay<span class="require">*</span></label>
-              <div class="col-md-8">
-                <select class="form-control" name="mayBay-select" required>
-                  <option value="-1">--- Chọn một máy bay ---</option>
-                  {%for mayBay in listAllMB%}
-                  <option value="{{mayBay.id}}">{{mayBay.Ten}}</option>
-                  {%endfor%}
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-md-2 control-label">Sân Bay Đi<span class="require">*</span></label>
-              <div class="col-md-8">
-                <select class="form-control" required>
-                  <option>--- Chọn một sân bay ---</option>
-                  {%for sanBay in listAllSB%}
-                  <option value="{{sanBay.id}}">{{sanBay.DiaChi}}({{sanBay.TenSB}})</option>
-                  {%endfor%}
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-md-2 control-label">Sân Bay Đến<span class="require">*</span></label>
-              <div class="col-md-8">
-                <select class="form-control" required>
-                  <option>--- Chọn một sân bay ---</option>
-                  {%for sanBay in listAllSB%}
-                  <option value="{{sanBay.id}}">{{sanBay.DiaChi}}({{sanBay.TenSB}})</option>
-                  {%endfor%}
-                </select>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label class="col-lg-2 control-label" for="email">Thời Gian Xuất Phát <span class="require">*</span></label>
-              <div class="col-lg-8">
-                <input type="datetime-local" id="tgxuatphat" name = "tgxuatphat" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Thời Gian Bay<span class="require">*</span></label>
-              <div class="col-lg-8">
-                <input type="number" id="tgbay" name="tgbay" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Số Ghế <span class="require">*</span></label>
-              <div class="col-lg-8">
-                <input type="number" id="soghe" name = "soghe" class="form-control" required>
-              </div>
-            </div>
-           
-
-            
-            <div class="form-group">
-              <label class="col-md-2 control-label">Trung Gian</label>
-              <div class="col-md-6" id="load">
-                <select class="form-control" name="TrungGian-select">
-                  <option value="">--- Chọn một sân bay ---</option>
-                  {%for sanBay in listAllSB%}
-                  <option value="{{sanBay.id}}">{{sanBay.DiaChi}}({{sanBay.TenSB}})</option>
-                  {%endfor%}
-                </select>
-              </div>
-              <div class="col-md-3">
-                <button class="btn btn-primary" type="button" id="loadMore">+</button>
-                <button class="btn btn-primary" type="button" id="loadMore">-</button>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Thời gian dừng</label>
-              <div class="col-lg-2">
-                <input type="number" id="thoiGianDung" name = "thoiGianDung" class="form-control" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Ghi chú</label>
-              <div class="col-lg-6">
-                <input type="Text" id="ChuThich-text" name = "ChuThich-text" class="form-control">
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-8 col-md-offset-2 padding-left-0 padding-top-20">
-                <button class="btn btn-primary" type="submit">Xác Nhận</button>
-                <button type="reset" class="btn btn-default">Nhập Lại</button>
-              </div>
-            </div>
-          </form>
+        {%if mess=='success'%}
+        <div class="alert alert-success mess" role="alert">
+          {{contentMess}}
         </div>
+        {%elif mess=='error' %}
+        <div class="alert alert-danger mess" role="alert">
+            {{contentMess}}
+        </div>
+        {%endif%}
+        <div>
+          <button class="tablink btn btn-primary btn-sm " onclick="openPage('TapChuyenBay')" id="defaultOpen">
+            <i class="fa fa-calendar" style="padding-right: 2px;"></i>Chuyến bay
+          </button>
+          <button class="tablink btn btn-primary btn-sm " onclick="openPage('TapTrungGian')">
+            <i class="fa fa-location-arrow" style="padding-right: 2px;"></i>Sân bay trung gian
+          </button>
+          <button class="tablink btn btn-primary btn-sm " onclick="openPage('TapBanGia')">
+            <i class="fa fa-comments" style="padding-right: 2px;"></i>Bảng giá vé
+          </button>  
+        </div>
+        <form action="/nhan-lich-post" method="post"  class="form-horizontal form-without-legend" >
+          
+          <div id="TapChuyenBay" class="row tabcontent">
+            
+            <br>
+            <div class="content-form-page">                
+              <div class="form-group">
+                <label class="col-md-2 control-label">Máy Bay<span class="require">*</span></label>
+                <div class="col-md-6">
+                  <select class="form-control" name="Id_MayBay" required>
+                    <option value="-1">--- Chọn một máy bay ---</option>
+                    {%for mayBay in listAllMB%}
+                    <option value="{{mayBay.id}}">{{mayBay.Ten}}</option>
+                    {%endfor%}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Sân Bay Đi<span class="require">*</span></label>
+                <div class="col-md-6">
+                  <select class="form-control" name="Id_SanBay_Di" required>
+                    <option>--- Chọn một sân bay ---</option>
+                    {%for sanBay in listAllSB%}
+                    <option value="{{sanBay.id}}">{{sanBay.DiaChi}}({{sanBay.TenSB}})</option>
+                    {%endfor%}
+                  </select>
+                </div>
+              </div>
+  
+              <div class="form-group">
+                <label class="col-md-2 control-label">Sân Bay Đến<span class="require">*</span></label>
+                <div class="col-md-6">
+                  <select class="form-control" name="Id_SanBay_Den" required>
+                    <option>--- Chọn một sân bay ---</option>
+                    {%for sanBay in listAllSB%}
+                    <option value="{{sanBay.id}}">{{sanBay.DiaChi}}({{sanBay.TenSB}})</option>
+                    {%endfor%}
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="col-lg-2 control-label" for="email">Thời Gian Xuất Phát <span class="require">*</span></label>
+                <div class="col-md-6">
+                  <input type="datetime-local" id="tgxuatphat" name = "ThoiGianXuatPhat" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-2 control-label">Thời Gian Bay(phút)<span class="require">*</span></label>
+                <div class="col-md-6">
+                  <input type="number" id="tgbay" name="ThoiGianBay" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-2 control-label">Số Ghế <span class="require">*</span></label>
+                <div class="col-md-4">
+                  <input type="number" id="soghe" name = "SoLuongChoNgoi" class="form-control" required>
+                </div>
+              </div>
+  
+              
+            </div>
+          </div>
+
+          <div id="TapTrungGian" class="row tabcontent">
+            
+            <div class="form-group">
+              <label class="col-lg-2 control-label"></label>
+              <div class="col-lg-6">
+                <button id="giamSoLuongTG" onclick="giamTG()"
+                 class="btn btn-primary" type="button" >-</button>
+                <button id="tangSoLuongTG" onclick="tangTG()"
+                 class="btn btn-primary" type="button" >+</button>
+              </div>
+            </div>
+          </div>
+          <div id="TapBanGia" class="row tabcontent">
+            <div class="form-group">
+              <label class="col-lg-2 control-label"></label>
+              <div class="col-lg-6">
+                <button id="giamSoBangGia" onclick="giamBG()" class="btn btn-primary" type="button" id="loadMore">-</button>
+                <button id="tangSoBangGia" onclick="tangBG()"
+                class="btn btn-primary" type="button" id="loadMore">+</button>
+              </div>
+            </div> 
+          </div>
+          <div class="row">
+            <div class="col-lg-8 col-md-offset-2 padding-left-0 padding-top-20">
+              <button class="btn btn-primary" type="submit">Xác Nhận</button>
+              <button type="reset" class="btn btn-default">Nhập Lại</button>
+            </div>
+          </div>
+        </form>
       </div>
-      <!-- END CONTENT -->
+
     </div>
     <!-- END SIDEBAR & CONTENT -->
   </div>
+  <script>
+    function openPage(pageName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablink");
+      document.getElementById(pageName).style.display = "block";
+    }
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+    
+    var TrungGianParent =  document.getElementById("TapTrungGian")
+    //var soTG_ele = document.getElementById('soLuongTG')
+    var soTG = 0// parseInt(soTG_ele.textContent)
+    var giamTG_ele = document.getElementById('giamSoLuongTG')
+    var tangTG_ele=document.getElementById('tangSoLuongTG')
+
+    function giamTG(){
+      if(soTG>0){
+        soTG-=1
+        //soTG_ele.textContent=soTG
+        var tgNode = document.getElementsByClassName('TrungGianNode')
+        tgNode[tgNode.length-1].remove()
+      }
+    }
+
+    function tangTG(){
+      if(soTG<{{soTG}}){
+        soTG+=1
+        //soTG_ele.textContent=soTG
+        TrungGianParent.innerHTML+=
+         `
+        <div class="content-form-page TrungGianNode"> 
+          <div class="alert alert-success">
+            Nhập sân bay trung gian thứ ${soTG}
+          </div>  
+          <div class="form-group">
+            <label class="col-md-2 control-label">Trung Gian</label>
+            <div class="col-md-6" id="load">
+              <select class="form-control" name="TrungGian-select">
+                <option value="">--- Chọn một sân bay ---</option>
+                {%for sanBay in listAllSB%}
+                <option value="{{sanBay.id}}">{{sanBay.DiaChi}}({{sanBay.TenSB}})</option>
+                {%endfor%}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">Thời gian dừng(phút)</label>
+            <div class="col-lg-2">
+              <input type="number" id="thoiGianDung" name = "thoiGianDung" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">Ghi chú</label>
+            <div class="col-md-6">
+              <input type="Text" id="ChuThich-text" name = "ChuThich-text" class="form-control">
+            </div>
+          </div>
+        </div>
+        `
+      }
+    }
+
+
+    var BangGiaParent =  document.getElementById("TapBanGia")
+    //var soBG_ele = document.getElementById('soBangGia')
+    var soBG = 0//parseInt(soTG_ele.textContent)
+    var giamBG_ele = document.getElementById('giamSoBangGia')
+    var tangBG_ele=document.getElementById('tangSoBangGia')
+
+    function giamBG(){
+      if(soBG>0){
+        soBG-=1
+        //soBG_ele.textContent=soBG
+        var tgNode = document.getElementsByClassName('BangGiaNode')
+        tgNode[tgNode.length-1].remove()
+      }
+    }
+
+    function tangBG(){
+      if(soBG<4){
+        soBG+=1
+        //soBG_ele.textContent=soBG
+        BangGiaParent.innerHTML+=
+        `
+        <div class="content-form-page BangGiaNode"> 
+          <div class="alert alert-success">
+            Nhập sân bay trung gian thứ ${soBG}
+          </div>                 
+          <div class="form-group">
+            <label class="col-md-2 control-label">Hạng vé</label>
+            <div class="col-md-6">
+              <input type="Text" id="hangVe-text" name = "hangVe-text" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">Giá vé</label>
+            <div class="col-md-6">
+              <input type="Text" id="giaVe-text" name = "giaVe-text" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">Số lượng vé</label>
+            <div class="col-lg-2">
+              <input type="number" id="soGhe-text" name = "soGhe-text" class="form-control" required>
+            </div>
+          </div>
+        </div>  
+        `
+      }
+    }
+
+    var mess= document.getElementsByClassName('mess')
+    if(mess.length!=0){
+      var mess_ele = mess[0]
+      setTimeout(()=>{
+        mess_ele.remove()
+      },3000)
+    }
+    </script>
 </div>
 {% endblock %}

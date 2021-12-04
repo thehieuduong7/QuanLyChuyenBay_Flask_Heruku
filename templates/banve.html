@@ -10,9 +10,10 @@
     <!-- BEGIN SIDEBAR & CONTENT -->
     <div class="row margin-bottom-40">
       <!-- BEGIN SIDEBAR -->
-      <div class="sidebar col-md-2 col-sm-5">
+      <div class="sidebar col-md-3 col-sm-5">
         <ul class="list-group margin-bottom-25 sidebar-menu">
-          <li class="list-group-item clearfix"><a href="/"><i class="fa fa-angle-right"></i>Tra cứu chuyến bay</a></li>
+          <li class="list-group-item clearfix"><a href="/"><i class="fa fa-plane"></i>Tra cứu chuyến bay</a></li>
+          <li class="list-group-item clearfix"><a href="/"><i class="fa fa-user"></i>Tra cứu khách hàng</a></li>
         </ul>
       </div>
       <!-- END SIDEBAR -->
@@ -20,9 +21,18 @@
       <!-- BEGIN CONTENT -->
 
       <div class="col-md-6 col-sm-7 ">
+        {%if mess=='success'%}
+        <div class="alert alert-success mess" role="alert">
+          {{contentMess}}
+        </div>
+        {%elif mess=='error' %}
+        <div class="alert alert-danger mess" role="alert">
+            {{contentMess}}
+        </div>
+        {%endif%}
         <h1>Thông tin khách hàng</h1>         
         <div class="content-form-page">
-          <form action="/mua-ve/{{id_chuyenBay}}/{{hangVe}}/{{number_kh}}" method="post" enctype="multipart/form-data" class="form-horizontal form-without-legend">
+          <form action="/ban-ve/{{chuyenBay.id}}/{{hangVe}}/{{number_kh}}" method="post" enctype="multipart/form-data" class="form-horizontal form-without-legend">
             {%for i in range(1,number_kh+1)%}
             <br>
             {%if i==1%}
@@ -88,14 +98,44 @@
       </div>
       <!-- END CONTENT -->
       <div class="col-md-2 col-sm-5 ">
-        <button class="btn btn-primary" type="submit">Đặt Vé</button>
-        <button type="reset" class="btn btn-default">Nhập Lại</button>
+
+        <h2>Thông tin vé</h2>
+        <ul class="blog-info">
+          <li class="display-4" style="font-size: larger;"><i class="fa fa-plane"></i>
+            <span style="font-weight: bold;"> Chuyến bay: </span>
+             {{ chuyenBay.id }}</li>
+          <li class="display-4" style="font-size: larger;"><i class="fa fa-calendar"></i>
+            <span style="font-weight: bold;"> Thời gian bay: </span>
+            {{ chuyenBay.ThoiGianXuatPhat }}</li>
+          <li class="display-4" style="font-size: larger;">
+            <i class="fa fa-map-marker"></i>
+            <span style="font-weight: bold;"> Sân bay đi:</span> {{ chuyenBay.sanbay_di.DiaChi }}
+          </li>
+          <li class="display-4" style="font-size: larger;"><i class="fa fa-map-marker"></i>
+            <span style="font-weight: bold;"> Sân bay đến: </span>
+            {{ chuyenBay.sanbay_den.DiaChi }}</li>
+          <li class="display-4" style="font-size: larger;"><i class="fa fa-comments"></i>
+            <span style="font-weight: bold;">  Hạng vé: </span>
+           {{ hangVe}}</li>
+          <li class="display-4" style="font-size: larger;"><i class="fa fa-tags"></i>
+            <span style="font-weight: bold;">  Số lượng vé: </span>
+             {{number_kh}}</li>
+          </ul>
       </div>
 
 
     </div>
     <!-- END SIDEBAR & CONTENT -->
   </div>
+  <script>
+    var mess= document.getElementsByClassName('mess')
+    if(mess.length!=0){
+      var mess_ele = mess[0]
+      setTimeout(()=>{
+        mess_ele.remove()
+      },3000)
+    }
+  </script>
 </div>
 
 {% endblock %}

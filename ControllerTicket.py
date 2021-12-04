@@ -12,7 +12,20 @@ import os
 from datetime import datetime
 
 class TicketController:
-    def checkQuyDinh(self,idChuyenBay):
+    def checkQuyDinhBanVe(self,Id_ChuyenBay,HangVe,soLuong):
+        bangGia= BangGiaVe.query.filter(
+            BangGiaVe.Id_ChuyenBay==Id_ChuyenBay,
+            BangGiaVe.HangVe==HangVe
+            ).first()
+        if(bangGia==None): return False
+        tongSoLuong = bangGia.SoGhe
+        
+        tongVeDaBan=  len(Ve.query.filter(Ve.Id_ChuyenBay==Id_ChuyenBay,
+                                          Ve.HangVe==HangVe).all())
+        if(tongSoLuong-tongVeDaBan<soLuong):
+            return False
+        return True
+    def checkQuyDinhDatVe(self,idChuyenBay):
         quyDinhDAO = QuyDinhController()
         minDatVe = quyDinhDAO.ThoiGianDatVeToiThieu()
         minDatVe= int(minDatVe.NoiDung)
@@ -87,18 +100,20 @@ class TicketController:
             msg['contentSend']=contentSend
             ListContent.append(msg.copy())
 
-        with app.app_context():
-            for content in ListContent:
-                msg = Message(subject="Ve may bay gia re",
+        for content in ListContent:
+            msg = Message(subject="Ve may bay gia re",
                     sender=app.config.get("MAIL_USERNAME"),
                     recipients=[content['email']],
                     body=content['contentSend'])
-                mail.send(msg)
-            return true
+            mail.send(msg)
+        return true
         
 
 
-    def datNhieuVe(self,Id_ChuyenBay,HangVe,list_kh):
+    def BanVeNhieuVe(self,Id_ChuyenBay,HangVe,list_kh):
+        if(self.checkQuyDinhBanVe(
+            Id_ChuyenBay,HangVe,len(list_kh))==False):
+            return "Bán vé thất bại!!! Vi phạm quy định"
         kh_dao=KhachHangController()
         try:
             list_ve=[]
@@ -111,7 +126,25 @@ class TicketController:
             return True
         except exc.SQLAlchemyError:
             db.session.rollback()
+            return "Bán vé thất bại!!! Kiểm tra lại thông tin khách hàng!!!"
+    
+    def DatVeNhieuVe(self,Id_ChuyenBay,HangVe,list_kh):
+        if(not self.checkQuyDinhDatVe(Id_ChuyenBay)):
             return False
+        kh_dao=KhachHangController()
+        try:
+            list_ve=[]
+            for kh in list_kh:
+                id=kh_dao.insert(kh).id
+                ve = self.datVe(Id_ChuyenBay,HangVe,id)
+                list_ve.append(ve)
+            self.sendTicketByMail(list_ve)
+            db.session.commit()
+            return True
+        except exc.SQLAlchemyError:
+            db.session.rollback()
+            return False
+        
         
     
     def tongVe(self,Id_ChuyenBay):
@@ -143,81 +176,10 @@ class TicketController:
             tongSoVe += self.tongVe(i.id)
         return tongSoVe    
     
-    def listBangGiaVe(self):
-        return BangGiaVe.query.all()
-from flask import render_template, request, redirect, session, jsonify
 
-
-    
-
-
-    
-
-if(__name__=='__main__'):
-    data_kh={}
-    data_kh['HoTenKH']='hieu1'
-    data_kh['GioiTinh']='nam'
-    data_kh['NamSinh']='2001'
-    data_kh['SDT']='26'
-    data_kh['CMND']='26'
-    data_kh['Email']='19110362@student.hcmute.edu.vn'
-    data_kh['HinhAnh'] = None
-    list_kh=[]
-    list_kh.append(data_kh.copy())
-    data_kh['HoTenKH']='hieu dem2'
-    data_kh['GioiTinh']='nam'
-    data_kh['NamSinh']='2001'
-    data_kh['SDT']='27'
-    data_kh['CMND']='27'
-    data_kh['Email']='19110362@student.hcmute.edu.vn'
-    data_kh['HinhAnh'] = None
-    list_kh.append(data_kh.copy())
-    ticDAO =TicketController()
-    Id_ChuyenBay=1
-    HangVe='Thuong'
-    print(ticDAO.datNhieuVe(1,'Thuong',list_kh))
-    data_kh={}
-    data_kh['HoTenKH']='hieu1'
-    data_kh['GioiTinh']='nam'
-    data_kh['NamSinh']='2001'
-    data_kh['SDT']='28'
-    data_kh['CMND']='28'
-    data_kh['Email']='19110362@student.hcmute.edu.vn'
-    data_kh['HinhAnh'] = None
-    list_kh=[]
-    list_kh.append(data_kh.copy())
-    data_kh['HoTenKH']='hieu dem2'
-    data_kh['GioiTinh']='nam'
-    data_kh['NamSinh']='2001'
-    data_kh['SDT']='29'
-    data_kh['CMND']='29'
-    data_kh['Email']='19110362@student.hcmute.edu.vn'
-    data_kh['HinhAnh'] = None
-    list_kh.append(data_kh.copy())
-    ticDAO =TicketController()
-    Id_ChuyenBay=1
-    HangVe='Thuong'
-    print(ticDAO.datNhieuVe(1,'Thuong',list_kh))
-    
-    #print(ticDAO.datVe(1,'Thuong',26))
-    khDAO = KhachHangController()
-    #print(khDAO.insert(data_kh))
-    #db.session.commit()
-    '''
+if(__name__=="__main__"):
+    dao = TicketController()
     with app.app_context():
-        msg = Message(subject="Ve may bay gia re",
-            sender=app.config.get("MAIL_USERNAME"),
-            recipients=['19110362@student.hcmute.edu.vn'],
-            body='test1')
-        mail.send(msg)
-    with app.app_context():
-        msg = Message(subject="Ve may bay gia re",
-            sender=app.config.get("MAIL_USERNAME"),
-            recipients=['19110362@student.hcmute.edu.vn'],
-            body='test2')
-        mail.send(msg)
-    '''
-    ve1= Ve.query.get(24)
-    ve2=Ve.query.get(25)
-    #print(ticDAO.sendTicketByMail([ve1,ve2]))
-    #print(ticDAO.sendTicketByMail([ve1,ve2]))
+        app.run(debug=1)
+   # print(dao.checkQuyDinhBanVe(1,'Thuong',2))
+        
