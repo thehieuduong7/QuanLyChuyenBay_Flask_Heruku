@@ -1,4 +1,5 @@
 from flask import render_template, request, redirect, session, jsonify
+from sqlalchemy import util
 from sqlalchemy.sql.sqltypes import Date
 from __init__ import app, CART_KEY, my_login
 from admin import*
@@ -12,6 +13,13 @@ from ControllerTicket import TicketController
 #Bỏ cả đối tượng vào biến current_user
 def user_load(user_id):
     return NguoiDung.query.get(user_id)
+
+
+@app.context_processor
+def quick_func():
+    def count_flight(bid):
+        return utils.count_flight_by_san_bay(bid)
+    return dict(count_flight = count_flight)
 
 @app.route("/")
 def home():
@@ -33,7 +41,7 @@ def home():
     
     count = utils.count_flights(flights)
     flights = utils.paging(flights, index)
-    
+
     newest_flight = utils.get_newest_flight()
     sanbay = utils.get_all_san_bay()
 

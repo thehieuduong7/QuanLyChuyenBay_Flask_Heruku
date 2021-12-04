@@ -5,15 +5,17 @@
     <div class = "col-md-5 col-xs-12">
         <table class = "table">
             <tr>
-                <th>Mã sản phẩm</th>
-                <th>Tên sản phẩm</th>
-                <th>Tổng doanh thu</th>
+                <th>Tỷ lệ</th>
+                <th>Doanh thu</th>
+                <th>Mã chuyến bay</th>
+                <th>Số vé bán được</th>
             </tr>
             {% for s in stats %}
             <tr>
-                <td>{{ s[0] }} </td>
-                <td>{{ s[1] }} </td>
-                <td>{% if s[2] %}{{ s[2] }} {% else %} 0 {% endif %} VND</td>
+                <td>{{ s.Tyle }}</td>
+                <td>{{ s.DoanhThu }}</td>
+                <td>{{ s.Id_chuyenbay }}</td>
+                <td>{{ s.SoVeBanDuoc }}</td>
             </tr>
             {% endfor %}
         </table>
@@ -30,20 +32,17 @@
             </div>
         <input type="submit" value="Thống kê" class = "btn btn-danger">
         </form>
-        <canvas id="productStatsId"></canvas>
+        <canvas id="catStatsId"></canvas>
     </div>
 </div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 let labels = [], info = [];
 
 {% for c in stats %}
-    {% if c[2] %}
-        labels.push('{{ c[1] }}')
-        info.push('{{ c[2] }}')
-    {% endif %}
+  labels.push('{{ c.Thang }}')
+  info.push('{{ c.Tyle }}')
 {% endfor %}
 
 let colors = []
@@ -57,7 +56,7 @@ for (let i = 0; i < labels.length ; i++){
 const data = {
     labels: labels,
     datasets: [{
-      label: 'Thống kê sản phẩm theo sản phẩm',
+      label: 'Thống kê doanh thu theo tháng',
       data: info,
       backgroundColor: colors,
       hoverOffset: 4
@@ -65,14 +64,13 @@ const data = {
   };
 
   const config = {
-  type: 'bar',
+  type: 'doughnut',
   data: data,
 };
 
 window.onload = function() {
-  let ctx = document.getElementById("productStatsId").getContext('2d')
+  let ctx = document.getElementById("catStatsId").getContext('2d')
   new Chart(ctx, config)
 }
 </script>
-
 {% endblock %}
