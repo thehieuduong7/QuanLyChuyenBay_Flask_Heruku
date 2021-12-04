@@ -24,8 +24,16 @@ def add_user(tendangnhap, tennguoidung, matkhau):
     else:
         return False
 
+
+
 def get_quydinh():
     return QuyDinh.query.all()
+
+def count_flight_by_san_bay(san_bay_di):
+    return ChuyenBay.query.filter(ChuyenBay.Id_SanBay_Di==san_bay_di, ChuyenBay.ThoiGianXuatPhat.__gt__(datetime.now())).count()
+
+def get_flight_by_san_bay(san_bay=None):
+    return ChuyenBay.query.filter(ChuyenBay.sanbay_di==san_bay, ChuyenBay.ThoiGianXuatPhat.__gt__(datetime.now())).order_by(ChuyenBay.ThoiGianXuatPhat).all()
 
 def get_new_flight():
      return ChuyenBay.query.filter(ChuyenBay.ThoiGianXuatPhat.__gt__(datetime.now())).all()
@@ -33,7 +41,7 @@ def get_new_flight():
 def get_flight_by_id(fid):
     return ChuyenBay.query.get(fid)
 
-def get_flight(noi_di=None, noi_den=None, time=None, page=None):
+def get_flight(noi_di=None, noi_den=None, time=None, page=None, san_bay=None):
     flights = ChuyenBay.query
     if noi_di and noi_den and time:
         try:
@@ -68,6 +76,11 @@ def get_newest_flight():
 
 def get_all_san_bay():
     return SanBay.query.all()
+
+def get_san_bay_by_id(id):
+    return SanBay.query.get(id)
+
+
 
 def get_ve(ve):
     ma = ve.split('-')
@@ -107,15 +120,14 @@ def xoa_ve(ve):
         db.session.rollback()
         return false
 
-def doi_ve(id_ve, id_chuyen_bay, hang_ve):
-    try: 
-        ve = Ve.query.get(id_ve)    
+def doi_ve(ve, id_chuyen_bay, hang_ve):
+    try:   
         gia_truoc = BangGiaVe.query.filter(BangGiaVe.Id_ChuyenBay==ve.Id_ChuyenBay,
                                      BangGiaVe.HangVe==ve.HangVe).first()
         gia_sau = BangGiaVe.query.filter(BangGiaVe.Id_ChuyenBay==id_chuyen_bay,
                                      BangGiaVe.HangVe==hang_ve).first()
         doanh_thu_truoc = DoanhThuThang.query.filter(DoanhThuThang.Id_ChuyenBay==ve.Id_ChuyenBay).first()
-        doanh_thu_sau = doanh_thu_truoc = DoanhThuThang.query.filter(DoanhThuThang.Id_ChuyenBay==id_chuyen_bay).first()
+        doanh_thu_sau = DoanhThuThang.query.filter(DoanhThuThang.Id_ChuyenBay==id_chuyen_bay).first()
         if doanh_thu_truoc and doanh_thu_sau:
             doanh_thu_truoc.DoanhThu -= gia_truoc.GiaVe
             doanh_thu_truoc.SoVeBanDuoc -= 1
@@ -126,19 +138,20 @@ def doi_ve(id_ve, id_chuyen_bay, hang_ve):
             db.session.add(doanh_thu_truoc)
             db.session.add(doanh_thu_sau)  
             db.session.add(gia_truoc)
-            db.session.add(gia_sau)          
+            db.session.add(gia_sau)
+            db.session.commit()          
         ve.Id_ChuyenBay = id_chuyen_bay
         ve.HangVe = hang_ve
         db.session.add(ve)       
         db.session.commit()
-        return True
+        return true
     except exc.SQLAlchemyError:
         db.session.rollback()
-        return False
+        return false
 
 
 def ve_da_mua(id):
-     return Ve.query.filter(Ve.khachhang.has(KhachHang.id_nguoidung==id)).all()
+     return Ve.query.filter(Ve.khachhang.has(KhachHang.id_nguoidung==id)).order_by(Ve.ThoiGianDatVe.desc()).all()
     # kh = KhachHang.query.filter(KhachHang.id_nguoidung==id)
     # if kh:         
     #     return Ve.query.filter(Ve.khachhang==kh).first()

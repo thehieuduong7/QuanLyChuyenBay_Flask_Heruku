@@ -19,7 +19,6 @@ app.secret_key = "AG(ASDAGIA(*&!@"
 app.config["PAGE_SIZE"] = 3
 
 db = SQLAlchemy(app=app)
-admin = Admin(app=app, name = "MY SHOP", template_mode = 'bootstrap4')
 my_login = LoginManager(app=app)
 CART_KEY = "cart" 
 
@@ -36,3 +35,6 @@ mail_settings = {
 
 app.config.update(mail_settings)
 mail = Mail(app)
+
+app.config['UPLOAD_FOLDER'] = 'static/uploads/'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024

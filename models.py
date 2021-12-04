@@ -56,7 +56,7 @@ class TrungGianChuyenBay(db.Model):
     ThoiGianDung = Column(Integer, default = 0)
     GhiChu = Column(String(100), nullable=True)
     __table_args__ = (db.UniqueConstraint(Id_ChuyenBay, Id_SanBay),)
-
+ 
 class BangGiaVe(db.Model):
     __tablename__ = 'BangGiaVe'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -82,6 +82,7 @@ class DoanhThuNam(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     TyLe = Column(Float)
     DoanhThu = Column(Float)
+    Thang = Column(Integer, default = datetime.now().month)
     Nam = Column(Integer, default = datetime.now().year)
     SoChuyenBay = Column(Integer)
 
@@ -92,7 +93,6 @@ class NguoiDung(db.Model, UserMixin):
     MatKhau = Column(String(100), nullable=False)
     VaiTro = Column(String(1), nullable=False)
     TenNguoiDung = Column(String(30), nullable=False)
-
     khachhang = relationship("KhachHang", backref="nguoidung", lazy=True)
 
     def __str__(self):

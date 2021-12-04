@@ -19,15 +19,17 @@
                 <th class="goods-page-ref-no">Chuyến Bay</th>
                 <th class="goods-page-description">Hạng vé</th>
                 <th class="goods-page-price">Giá Vé</th>
-                <th class="goods-page-total" colspan="2">Thời gian khởi hành</th>
+                <th class="goods-page-ref-no" colspan="2">Thời gian khởi hành</th>
+                <th class="goods-page-ref-no" colspan="2">Thời gian đặt vé</th>
+
               </tr>
               {% for v in ve %}
               <tr>
                 <td class="goods-page-image">
-                  <btn onclick="checkVe('{{v.id}}-{{v.khachhang.SDT}}-{{v.khachhang.id}}', 0)"><img src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/products/model4.jpg') }}" alt="Ảnh đại diện"></btn>
+                  <btn><img src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/products/model4.jpg') }}" alt="Ảnh đại diện"></btn>
                 </td>
                 <td class="goods-page-description">
-                  <h3><a href="#">{{ current_user.TenNguoiDung }}</a></h3>
+                  <h3><a href="#">{{ v.khachhang.HoTenKH }}</a></h3>
                   <p><strong>CMND :</strong>{{ v.khachhang.CMND }}</p>
                   <em>SDT: {{ v.khachhang.SDT }}</em>
                 </td>
@@ -38,13 +40,24 @@
                   <strong>{{v.HangVe}}</strong>
                 </td>
                 <td class="goods-page-price">
-                  <strong><span>$</span>60</strong>
+                  
+                  {% for gia in v.chuyenbay.banggia %}
+                  {% if gia.HangVe == v.HangVe %}
+                    <strong><span>{{ gia.GiaVe }} VND</span></strong>
+                  {% endif %}
+                  {% endfor %}
                 </td>
-                <td class="goods-page-total">
+                <td class="goods-page-ref-no">
                   <strong>{{v.chuyenbay.ThoiGianXuatPhat}}</strong>
                 </td>
+                <td class="goods-page-ref-no">
+                  <strong>{{v.ThoiGianDatVe}}</strong>
+                </td>
                 <td class="del-goods-col">
-                  <btn class="del-goods" onclick="deleteVe('{{v.id}}-{{v.khachhang.SDT}}-{{v.khachhang.id}}')">&nbsp;</btn>
+                  <a class="btn btn-primary" href="/doi-tra-ve?ve={{v.id}}-{{v.khachhang.SDT}}-{{v.khachhang.id}}">Đổi</a>
+                </td>
+                <td class="del-goods-col">
+                  <button class="btn btn-primary" onclick="checkVe('{{v.id}}-{{v.khachhang.SDT}}-{{v.khachhang.id}}', 1, null, null)">Trả</button>
                 </td>
               </tr>
               {% endfor %}
@@ -56,17 +69,7 @@
             </table>
             
             </div>
-           
-            <hr class="blog-post-sep">
-              <ul class="pagination">
-              <li><a href="#">Prev</a></li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li class="active"><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#">Next</a></li>
-              </ul>   
+  
                
             <!-- <div class="shopping-total">
               <ul>
@@ -97,77 +100,5 @@
   </div>
 </div>
 <script>
-  function checkVe(ve, action) {
-    fetch("/api/check-ve/"+ve, {
-        method: "post"
-    }).then(function(res) {
-        return res.json()
-    }).then(function(data) {
-        if (data.error_code == 404)
-            alert("Vé đã quá thời gian trả không tồn tại hoặc đã quá thời gian đổi trả!")
-        else
-        {
-            if (action==0)
-            {
-                $("doi-ve").append(<form role="form" class="form-horizontal form-without-legend">
-            
-                <div class="form-group">
-                  <label class="col-md-2 control-label">Hạng Vé<span class="require">*</span></label>
-                  <div class="col-md-8">
-                    <select class="form-control" required>
-                      <option>--- Chọn Một Hạng Vé ---</option>
-                      <option>Option 1</option>
-                      <option>Option 2</option>
-                    </select>
-                  </div>
-                </div>
-    
-                <div class="form-group">
-                  <label class="col-md-2 control-label">Sân Bay Đi: <span class="require">*</span></label>
-                  <div class="col-md-8">
-                    <select class="form-control" required>
-                      <option>--- Chọn một sân bay ---</option>
-                      <option>Option 1</option>
-                      <option>Option 2</option>
-                    </select>
-                  </div>
-                </div>
-    
-                <div class="form-group">
-                  <label class="col-md-2 control-label">Sân Bay Đến: <span class="require">*</span></label>
-                  <div class="col-md-8">
-                    <select class="form-control" required>
-                      <option>--- Chọn một sân bay ---</option>
-                      <option>Option 1</option>
-                      <option>Option 2</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div class="form-group">
-                  <label class="col-lg-2 control-label" for="email">Thời Gian Xuất Phát: </label>
-                  <div class="col-lg-8">
-                    <input type="datetime-local" id="tgxuatphat" name = "tgxuatphat" class="form-control" disabled>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-lg-2 control-label">Thời Gian Bay: </label>
-                  <div class="col-lg-8">
-                    <input type="number" id="tgbay" name="tgbay" class="form-control" disabled>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-8 col-md-offset-2 padding-left-0 padding-top-20">
-                    <button class="btn btn-primary" type="submit">Xác Nhận</button>
-                    <button type="reset" class="btn btn-default">Nhập Lại</button>
-                  </div>
-                </div>
-              </form>)
-            } 
-            else
-                deleteVe(ve)
-        }
-    })
-}
 </script>
 {% endblock %}
