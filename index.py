@@ -195,8 +195,7 @@ def info_ve():
         return render_template("info-ve.html", ve=ve)
 @app.route("/dat-ve-online")
 def dat_ve_online():
-    if current_user.is_authenticated:
-        return render_template("dat-ve-online.html")
+    return render_template("dat-ve-online.html")
 
 @app.route("/api/check-ve/<id_ve>", methods=['post'])
 def check_ve(id_ve):

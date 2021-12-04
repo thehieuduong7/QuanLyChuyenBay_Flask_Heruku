@@ -128,7 +128,11 @@
                 
               <ul class="dropdown-menu">
                 <li><a href="/list-ve">Danh Sách Vé</a></li>
-                <li><a href="/ban-ve">Bán Vé</a></li>               
+                <li><a href="/ban-ve">Bán Vé</a></li>
+                <li>
+                  <a href="/doi-tra-ve">Đổi trả vé</a>                 
+                </li>  
+                <li><a href="/doi-ve">Đổi trả Vé</a></li>                 
               </ul>
             </li>
             <li class="dropdown">
@@ -189,11 +193,30 @@
             <li><a href="/admin" target="_blank">Admin</a></li>
             {% elif current_user.VaiTro == "K" %}
             <li><a href="/">Home</a></li>
-            <li><a href="/info-ve">Vé Đã Mua</a></li>
+            <li><a href="/info-ve?id={{ current_user.id }}">Vé Đã Mua</a></li>
             <!-- END TOP SEARCH -->
             {% else %}
             <li><a href="/">Home</a></li>
+            <li>
+              <a href="/doi-tra-ve">Đổi trả vé</a>
+              
+            </li>  
             {% endif %}
+            <!-- <li class="menu-search">
+              <span class="sep"></span>
+              <i class="fa fa-search search-btn"></i>
+              <div class="search-box">
+                <form action="/doi-ve">
+                  <div class="input-group">
+                    <input type="text" id="ve" name="ve" placeholder="Search" class="form-control">
+                    <span class="input-group-btn">
+                      <button class="btn btn-primary" type="submit">Đổi</button>
+                    </span>
+                  </div>
+                </form>
+                <button class="btn btn-primary" onclick="deleteVe()">Trả</button>
+              </div> 
+            </li> -->
           </ul>
         </div>
         <!-- END NAVIGATION -->
