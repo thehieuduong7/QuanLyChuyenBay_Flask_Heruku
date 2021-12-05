@@ -8,6 +8,8 @@ import utils
 from datetime import datetime, date
 import math
 from ControllerTicket import TicketController
+from ControllerQuyDinh import QuyDinhController
+from ControllerNhapLich import NhapLichController
 @my_login.user_loader
 #Bỏ cả đối tượng vào biến current_user
 def user_load(user_id):
