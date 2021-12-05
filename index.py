@@ -243,10 +243,17 @@ def nhan_lich_post():
         if(result!=True):
             mess='error'
             contentMess=result
+            
+        quyDinhDAO = QuyDinhController()
+        minBay= quyDinhDAO.ThoiGianBayToiThieu().NoiDung
+        soTG = quyDinhDAO.SoSanBayTrungGianToiDa().NoiDung
+        minDung=quyDinhDAO.ThoiGianDungToiThieu().NoiDung
+        maxDung=quyDinhDAO.ThoiGianDungToiDa().NoiDung
 
         return render_template("nhanlichchuyenbay.html",listAllMB=listAllMB,
                                listAllSB=listAllSB,mess=mess,
-                               contentMess=contentMess)
+                               contentMess=contentMess,minBay=minBay,
+                               soTG=soTG,minDung=minDung,maxDung=maxDung)
         
 @app.route("/list-khach")
 def list_khach():
