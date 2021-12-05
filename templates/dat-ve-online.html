@@ -104,7 +104,9 @@
               </div>
             </div>  
             {%endfor%}
-          <button type="submit" class="btn btn-primary">Lưu</button>
+          <button type="submit" 
+          onclick="return confirm('Xác nhận bán vé?')" 
+          class="btn btn-primary">Lưu</button>
           </form>
         </div>
       </div>
@@ -132,7 +134,11 @@
           <li class="display-4" style="font-size: larger;"><i class="fa fa-tags"></i>
             <span style="font-weight: bold;">  Số lượng vé: </span>
              {{number_kh}}</li>
-          </ul>
+ 
+          <li class="display-4" style="font-size: larger;"><i class="fa fa-money"></i>
+            <span style="font-weight: bold;">  Tổng tiền: </span>
+             {{tongTien}}</li>
+        </ul>
       </div>
 
 
