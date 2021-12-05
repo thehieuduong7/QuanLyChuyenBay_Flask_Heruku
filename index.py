@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, session, jsonify
 from sqlalchemy.sql.sqltypes import Date
 from ControllerBangGiaVe import BangGiaVeController
+from ControllerKhachHang import KhachHangController
 from __init__ import app, CART_KEY, my_login
 from admin import*
 from models import*
@@ -272,7 +273,28 @@ def nhan_lich_post():
 @app.route("/list-khach")
 def list_khach():
     if current_user.VaiTro == "N":
-        return render_template("list-khachhang.html")
+        khDAO = KhachHangController()
+        page = request.args.get('page')
+        if(page==None):
+            page=1
+        else:
+            page=int(page)
+        
+        Name= request.args.get('searchName')
+        if(Name==None):
+            Name=""
+            searchName="%%"
+        else:
+            searchName="%"+Name+"%"
+        
+        listAll = KhachHang.query.filter(KhachHang.HoTenKH.like(searchName)).all()
+        
+        maxPage=khDAO.maxPage(listAll)
+
+        listKhachHang=khDAO.listInPage(page,listAll)
+        
+        return render_template("list-khachhang.html",
+                listKhachHang=listKhachHang,maxPage=maxPage,page=page,searchName=Name)
 
 
 @app.route("/dat-ve-online/<int:id_cb>/<hang>/<int:soluong>",methods=['Get','Post'])
