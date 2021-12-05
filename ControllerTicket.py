@@ -69,7 +69,7 @@ class TicketController:
                 return False
             
             name = veMayBay.khachhang.HoTenKH
-            id_ve=veMayBay.id + '-' + veMayBay.khachhang.SDT + '-' + veMayBay.Id_KhachHang
+            id_ve=str(veMayBay.id) + '-' + str(veMayBay.khachhang.SDT) + '-' + str(veMayBay.Id_KhachHang)
             thoiGianDat= veMayBay.ThoiGianDatVe
             hangVe=veMayBay.HangVe
             
@@ -179,7 +179,7 @@ class TicketController:
 
 if(__name__=="__main__"):
     dao = TicketController()
-    with app.app_context():
-        app.run(debug=1)
+    ve = Ve.query.get(1)
+    print(dao.sendTicketByMail(ve))
    # print(dao.checkQuyDinhBanVe(1,'Thuong',2))
         

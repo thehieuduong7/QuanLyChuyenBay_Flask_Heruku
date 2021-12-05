@@ -1,13 +1,13 @@
 from math import prod
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from sqlalchemy import func
 from sqlalchemy.sql.expression import null
+from flask_mail import Message
 from models import*
-from __init__ import app, db
+from __init__ import app, db, mail
 from flask_login import current_user
 import hashlib
 from sqlalchemy import exc
-from ControllerTicket import TicketController
 
 def add_user(tendangnhap, tennguoidung, matkhau): 
     get_user = NguoiDung.query.filter(NguoiDung.TenDN == tendangnhap).all()
@@ -110,7 +110,7 @@ def check_ve_moi(id_chuyen_bay, hang_ve):
                                     BangGiaVe.HangVe==hang_ve).first()
     so_ghe_het = Ve.query.filter(Ve.Id_ChuyenBay==id_chuyen_bay,
                                  Ve.HangVe==hang_ve).count()
-    if so_ghe>so_ghe_het:
+    if so_ghe.SoGhe>so_ghe_het:
         return true
     return false
 
@@ -154,8 +154,11 @@ def doi_ve(ve, id_chuyen_bay, hang_ve):
         ve.Id_ChuyenBay = id_chuyen_bay
         ve.HangVe = hang_ve
         db.session.add(ve) 
-        con = TicketController()
-        if con.sendTicketByMail(ve)==true:      
+        db.session.flush()
+        db.session.refresh(ve)
+        # db.session.commit()
+        # return true
+        if send_mail(ve)==true:      
             db.session.commit()
             return true
         return false
@@ -163,6 +166,45 @@ def doi_ve(ve, id_chuyen_bay, hang_ve):
         db.session.rollback()
         return false
 
+def send_mail(veMayBay):
+    if veMayBay:
+        name = veMayBay.khachhang.HoTenKH
+        id_ve=str(veMayBay.id) + '-' + str(veMayBay.khachhang.SDT) + '-' + str(veMayBay.Id_KhachHang)
+        thoiGianDat= veMayBay.ThoiGianDatVe
+        hangVe=veMayBay.HangVe
+                
+        chuyenBay = veMayBay.chuyenbay
+        id_chuyenBay=chuyenBay.id
+        sanBayDi=chuyenBay.sanbay_di.DiaChi+' ('+chuyenBay.sanbay_di.TenSB+')'
+        sanBayDen=chuyenBay.sanbay_den.DiaChi+' ('+chuyenBay.sanbay_den.TenSB+')'
+        bangGiaVe = BangGiaVe.query.filter_by(Id_ChuyenBay=id_chuyenBay,HangVe=hangVe ).first()
+        giaVe=bangGiaVe.GiaVe
+                
+        email = veMayBay.khachhang.Email
+        content = '''
+                    Hang hang khong gia re                                      Sai gon {time}
+                                                            THONG TIN VE MAY BAY
+                    Khach hang: {name}
+                    Ma ve: {id_ve}
+                    Chuyen bay: {id_chuyenBay}
+                    San bay di: {sanBayDi:15} San bay den:{sanBayDen:20}
+                    Hang ve: {hangVe}
+                    Gia ve: {giaVe} dong
+                    Thoi gian dat: {thoiGianDat}
+                '''
+        contentSend = content.format(time=date.today(),name=name,id_ve=id_ve,
+                    id_chuyenBay=id_chuyenBay,sanBayDi=sanBayDi,sanBayDen=sanBayDen,hangVe=hangVe,
+                    giaVe=giaVe,thoiGianDat=thoiGianDat)
+        ms={}
+        ms['email']=email
+        ms['contentSend']=contentSend
+        msg = Message(subject="Ve may bay gia re",
+                sender=app.config.get("MAIL_USERNAME"),
+                recipients=[ms['email']],
+                body=ms['contentSend'])
+        mail.send(msg)
+        return true
+    return false
 
 def ve_da_mua(id):
      return Ve.query.filter(Ve.khachhang.has(KhachHang.id_nguoidung==id)).order_by(Ve.ThoiGianDatVe.desc()).all()
@@ -171,3 +213,8 @@ def ve_da_mua(id):
     #     return Ve.query.filter(Ve.khachhang==kh).first()
     # else:
     #     return
+
+if __name__== '__main__':
+    with app.app_context():
+        ve = Ve.query.get(19)
+        print(send_mail(ve))
