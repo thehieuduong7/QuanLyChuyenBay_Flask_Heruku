@@ -13,11 +13,11 @@
             </tr>
             {% for s in stats %}
             <tr>
-                <td>{{ s[1] }} </td>
-                <td>{% if s[2] %}{{ s[2] }} {% else %} 0 {% endif %} VND</td>
-                <td>{{ s[3] }}</td>
-                <td>{{ s[4] }}</td>
-                <td>{{ s[5] }}</td>
+                <td>{{ s.TyLe }} </td>
+                <td>{% if s.DoanhThu %}{{ s.DoanhThu }} {% else %} 0 {% endif %} VND</td>
+                <td>{{ s.Thang }}</td>
+                <td>{{ s.Nam }}</td>
+                <td>{{ s.SoChuyenBay }}</td>
             </tr>
             {% endfor %}
         </table>
@@ -41,10 +41,9 @@
 let labels = [], info = [];
 
 {% for c in stats %}
-    {% if c[2] %}
-        labels.push('{{ c[1] }}')
-        info.push('{{ c[2] }}')
-    {% endif %}
+   
+        labels.push('{{ c.Thang }}')
+        info.push('{{ c.DoanhThu }}')
 {% endfor %}
 
 let colors = []
