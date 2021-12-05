@@ -63,8 +63,12 @@
                     <li><i class="fa fa-comments"></i> {{ f.ThoiGianBay }} phút</li>
                     <li><i class="fa fa-tags"></i> {{ f.maybay.Ten }}</li>
                     </ul>
-                    <p>Đi từ sân bay {{ f.sanbay_di.TenSB}} đến sân bay {{ f.sanbay_den.TenSB}} | Giá chỉ từ {{ f.banggia.GiaVe }} </p> 
-
+                    <p>Đi từ sân bay {{ f.sanbay_di.TenSB}} đến sân bay {{ f.sanbay_den.TenSB}} </p> 
+                    {% for v in f.banggia %}
+                    {% if v.HangVe == "Thường" %}
+                        <p>| Giá chỉ từ {{ v.GiaVe }} VND</p>
+                    {% endif %}
+                    {% endfor %}
                     {% if current_user.VaiTro == "K" %}
                     <div class="row">
                         <div class="col-md-4">

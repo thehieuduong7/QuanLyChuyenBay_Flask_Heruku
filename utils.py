@@ -72,6 +72,9 @@ def paging(flights, page):
 def count_flights(flights):
     return len(flights)
 
+def count_ve(ve):
+    return len(ve)
+
 def get_newest_flight():
     return ChuyenBay.query.filter(ChuyenBay.ThoiGianXuatPhat.__gt__(datetime.now())).order_by(ChuyenBay.ThoiGianXuatPhat).limit(1)
 
@@ -213,6 +216,17 @@ def ve_da_mua(id):
     #     return Ve.query.filter(Ve.khachhang==kh).first()
     # else:
     #     return
+
+def get_all_ve():
+    return Ve.query.join(ChuyenBay, Ve.Id_ChuyenBay==ChuyenBay.id).filter(ChuyenBay.ThoiGianXuatPhat.__gt__(datetime.now())).order_by(Ve.ThoiGianDatVe.desc()).all()
+
+def paging_ve(ve, page):
+    if ve:
+        size = app.config["PAGE_SIZE"]
+        start = (page-1)*size
+        end = start+size
+        return ve[start:end]
+    return ve
 
 if __name__== '__main__':
     with app.app_context():

@@ -126,7 +126,18 @@ def normaluer_forget_password():
 @app.route("/list-ve")
 def list_ve():
     if current_user.VaiTro == "N":
-        return render_template("list-ve.html")
+        ve = utils.get_all_ve()
+        index = request.args.get("page")
+        if index:
+            index = int(index)
+        else:
+            index = 1
+        count = utils.count_ve(ve)
+        ve = utils.paging_ve(ve, index)
+        return render_template("list-ve.html", ve=ve,
+                                index=index, 
+                                page_num=math.ceil(count/5), 
+                                )
 @app.route("/ban-ve/<id_cb>/<hang>/<int:soluong>",methods=['Post','Get'])
 def ban_ve(id_cb,hang,soluong):
     if current_user.VaiTro == "N":
