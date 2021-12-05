@@ -72,16 +72,19 @@
                         </div>
                         <div class="col-md-5 padding-left-0">
                             <select class="form-control" id="mySelect">
-                                <option>------Chọn một hạng vé------</option>
-                                <option>option 1</option>
-                                <option>option 2</option>
+                                {%for BangGiaVe in ListBangGiaVe%}
+                                {%if BangGiaVe.Id_ChuyenBay==f.id%}
+                                <option value="{{BangGiaVe.HangVe}}">{{BangGiaVe.HangVe}}</option>
+                                {%endif%}
+                                {%endfor%}
                             </select>
                         </div>
                         <div class="col-md-2 padding-left-0">
-                           <a href="" onclick="this.href='/dat-ve-online?hangve='
-                           +document.getElementById('mySelect').value+
-                           '&soluong='+document.getElementById('soluong').value+
-                           '&idchuyenbay={{ f.id }}'"><button type="button" class="btn btn-primary">Đặt Vé</button></a>
+                            <a href="" onclick="this.href='/dat-ve-online/'
+                            +'{{ f.id }}/'+
+                            document.getElementById('mySelect')[document.getElementById('mySelect').selectedIndex].value+'/'+
+                            document.getElementById('soluong').value
+                            "><button type="button" class="btn btn-primary">Bán Vé</button></a>
                         </div>
                     </div>
                     {% elif current_user.VaiTro == "N" %}
@@ -91,16 +94,19 @@
                         </div>
                         <div class="col-md-5 padding-left-0">
                             <select class="form-control" id="mySelect">
-                                <option>------Chọn một hạng vé------</option>
-                                <option>option 1</option>
-                                <option>option 2</option>
+                                {%for BangGiaVe in ListBangGiaVe%}
+                                {%if BangGiaVe.Id_ChuyenBay==f.id%}
+                                <option value="{{BangGiaVe.HangVe}}">{{BangGiaVe.HangVe}}</option>
+                                {%endif%}
+                                {%endfor%}
                             </select>
                         </div>
                         <div class="col-md-2 padding-left-0">
-                            <a href="" onclick="this.href='/ban-ve?hangve='
-                            +document.getElementById('mySelect').value+
-                            '&soluong='+document.getElementById('soluong').value+
-                            '&idchuyenbay={{ f.id }}'"><button type="button" class="btn btn-primary">Bán Vé</button></a>
+                            <a href="" onclick="this.href='/ban-ve/'
+                            +'{{ f.id }}/'+
+                            document.getElementById('mySelect')[document.getElementById('mySelect').selectedIndex].value+'/'+
+                            document.getElementById('soluong').value
+                            "><button type="button" class="btn btn-primary">Bán Vé</button></a>
                         </div>
                     </div>
                     {% endif %}
