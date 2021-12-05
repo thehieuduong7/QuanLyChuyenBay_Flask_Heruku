@@ -46,7 +46,7 @@ def home():
 
     newest_flight = utils.get_newest_flight()
     sanbay = utils.get_all_san_bay()
-
+    ListBangGiaVe = BangGiaVeController().listBangGiaVe()
     return render_template("home.html", quy_dinh = quy_dinh,
                                         flights=flights,
                                         newest_flight = newest_flight,
@@ -55,7 +55,7 @@ def home():
                                         noi_di=request.args.get("noidi"),
                                         noi_den=request.args.get("noiden"),
                                         time = request.args.get("time"),
-                                        index = index)
+                                        index = index,ListBangGiaVe=ListBangGiaVe)
 
 @app.route("/login", methods=["POST"])
 def login_execute():

@@ -19,7 +19,7 @@ class KhachHangController():
         db.session.flush()
         db.session.refresh(kh)
         id= kh.id
-        filename= 'hìnhAnh'+str(id)+'.png'
+        filename= 'hinhAnh'+str(id)+'.png'
         HinhAnh=self.saveImg(HinhAnh,filename)
         kh.HinhAnh=HinhAnh
         return kh

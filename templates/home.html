@@ -8,7 +8,6 @@
   </ul>
   <!-- BEGIN SIDEBAR & CONTENT -->
   <div class="row margin-bottom-40">
-      
       <!-- BEGIN CONTENT -->
       <div class="col-md-12 col-sm-12">
       <h1>Danh Sách Chuyến Bay</h1>
@@ -36,7 +35,7 @@
                     <div class="form-group col-md-5">
                         <label class="col-lg-4 control-label padding-left-0 padding-right-0">Thời Gian Xuất Phát: </label>
                         <div class="col-lg-8">
-                            <input type="datetime-local" id="time" name = "time" class="form-control" required>
+                            <input type="datetime-local" id="time" name = "time" class="form-control">
                         </div>
                     </div>
                         <button class="btn btn-primary" type="submit">Tìm Kiếm</button>
@@ -58,41 +57,59 @@
                     <img class="img-responsive" alt="" src="/static/images/ChuyenBay.jpg">
                 </div>
                 <div class="col-md-8 col-sm-8">
-                    <h2><a href="" onclick="this.href='/dat-ve-online?hangve='
-                        +document.getElementById('mySelect').value+
-                        '&soluong='+document.getElementById('soluong').value+
-                        '&idchuyenbay={{ f.id }}'">Chuyến bay từ {{ f.sanbay_di.DiaChi }} đến {{ f.sanbay_den.DiaChi }}</a></h2>
+                    <h2><a>Chuyến bay từ {{ f.sanbay_di.DiaChi }} đến {{ f.sanbay_den.DiaChi }}</a></h2>
                     <ul class="blog-info">
                     <li><i class="fa fa-calendar"></i> {{ f.ThoiGianXuatPhat }}</li>
                     <li><i class="fa fa-comments"></i> {{ f.ThoiGianBay }} phút</li>
                     <li><i class="fa fa-tags"></i> {{ f.maybay.Ten }}</li>
                     </ul>
-                    <p>Đi từ sân bay {{ f.sanbay_di.TenSB}} đến sân bay {{ f.sanbay_den.TenSB}} </p> 
-                    {% for v in f.banggia %}
-                    {% if v.HangVe == "Thường" %}
-                        <p>| Giá chỉ từ {{ v.GiaVe }} VND</p>
-                    {% endif %}
-                    {% endfor %}
+                    <p>Đi từ sân bay {{ f.sanbay_di.TenSB}} đến sân bay {{ f.sanbay_den.TenSB}} | Giá chỉ từ {{ f.banggia.GiaVe }} </p> 
+
+                    {% if current_user.VaiTro == "K" %}
                     <div class="row">
                         <div class="col-md-4">
-                            <input type="number" name="soluong" id="soluong" class="form-control" placeholder="Nhập số lượng vé">
+                            <input type="number" name="soluong" id="soluong{{f.id}}" class="form-control" placeholder="Nhập số lượng vé">
                         </div>
                         <div class="col-md-5 padding-left-0">
-                            <select class="form-control" id="mySelect">
-                                <option>------Chọn một hạng vé------</option>
-                                {% for v in f.banggia %}
-                                <option>{{v.HangVe}}</option>
-                              {% endfor %}
+                            <select class="form-control" id="mySelect{{f.id}}">
+                                {%for BangGiaVe in ListBangGiaVe%}
+                                {%if BangGiaVe.Id_ChuyenBay==f.id%}
+                                <option value="{{BangGiaVe.HangVe}}">{{BangGiaVe.HangVe}}</option>
+                                {%endif%}
+                                {%endfor%}
                             </select>
                         </div>
                         <div class="col-md-2 padding-left-0">
-                           <a href="" onclick="this.href='/dat-ve-online?hangve='
-                           +document.getElementById('mySelect').value+
-                           '&soluong='+document.getElementById('soluong').value+
-                           '&idchuyenbay={{ f.id }}'"><button type="button" class="btn btn-primary">Đặt Vé</button></a>
+                            <a href="" onclick="this.href='/dat-ve-online/'
+                            +'{{ f.id }}/'+
+                            document.getElementById('mySelect{{f.id}}')[document.getElementById('mySelect{{f.id}}').selectedIndex].value+'/'+
+                            document.getElementById('soluong{{f.id}}').value
+                            "><button type="button" class="btn btn-primary">Bán Vé</button></a>
                         </div>
                     </div>
-                    
+                    {% elif current_user.VaiTro == "N" %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="number" name="soluong" id="soluong{{f.id}}" class="form-control" placeholder="Nhập số lượng vé" value=1>
+                        </div>
+                        <div class="col-md-5 padding-left-0">
+                            <select class="form-control" id="mySelect{{f.id}}">
+                                {%for BangGiaVe in ListBangGiaVe%}
+                                {%if BangGiaVe.Id_ChuyenBay==f.id%}
+                                <option value="{{BangGiaVe.HangVe}}">{{BangGiaVe.HangVe}}</option>
+                                {%endif%}
+                                {%endfor%}
+                            </select>
+                        </div>
+                        <div class="col-md-2 padding-left-0">
+                            <a href="" onclick="this.href='/ban-ve/'
+                            +'{{ f.id }}/'+
+                            document.getElementById('mySelect{{f.id}}')[document.getElementById('mySelect{{f.id}}').selectedIndex].value+'/'+
+                            document.getElementById('soluong{{f.id}}').value
+                            "><button type="button" class="btn btn-primary">Bán Vé</button></a>
+                        </div>
+                    </div>
+                    {% endif %}
                     
                 </div>
             </div>
@@ -117,15 +134,37 @@
           <div class="col-md-3 col-sm-3 blog-sidebar">
                 <br></br>       
               <!-- CATEGORIES START -->
-              <h2 class="no-top-space">Các chuyến bay theo sân bay đi</h2>
+              <h2 class="no-top-space">Phân Loại</h2>
               <ul class="nav sidebar-categories margin-bottom-40">
-                {% for s in sanbay%}
-                <li><a href="/?san-bay={{ s.id }}">{{ s.DiaChi }}: {{ count_flight(s.id|int) }}</a></li>
-                {% endfor %}
+
+                <li><a href="#">London (18)</a></li>
+
               </ul>
               <!-- CATEGORIES END -->
 
-                                      
+              <!-- BEGIN RECENT NEWS -->                            
+              <h2>Chuyến Bay Mới</h2>
+              {% for flight in newest_flight %}
+              <div class="recent-news margin-bottom-10">
+              <div class="row margin-bottom-10">
+                  <div class="col-md-3">
+                  <img class="img-responsive" alt="" src="/static/images/ChuyenBay.jpg">                        
+                  </div>
+                  <div class="col-md-9 recent-news-inner">
+                  <h3><a href="">Chuyến bay từ {{flight.sanbay_di.DiaChi }} đến {{flight.sanbay_den.DiaChi }}</a></h3>
+                  <ul class="blog-info">
+                    <li><i class="fa fa-calendar"></i> {{ flight.ThoiGianXuatPhat }}</li>
+                    <li><i class="fa fa-comments"></i> {{ flight.ThoiGianBay }} phút</li>
+                    <li><i class="fa fa-tags"></i> {{ flight.maybay.Ten }}</li>
+                    </ul>
+                    <p>Đi từ sân bay {{ flight.sanbay_di.TenSB}} đến sân bay {{ flight.sanbay_den.TenSB}}</p>
+                    <p>Giá chỉ từ {{ flight.banggia.GiaVe }}</p>
+                  </div>                        
+              </div>
+              
+              </div>
+              {% endfor %}
+              <!-- END RECENT NEWS -->                            
 
               <!-- BEGIN BLOG TALKS -->
               <div class="blog-talks margin-bottom-30">
@@ -199,9 +238,4 @@
   <!-- END SIDEBAR & CONTENT -->
   </div>
 </div>
-<script>
-    function myFunction() {
-      alert('Trả thành công');
-    }
-</script>
 {% endblock %}
