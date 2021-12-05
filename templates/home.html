@@ -138,37 +138,16 @@
           <div class="col-md-3 col-sm-3 blog-sidebar">
                 <br></br>       
               <!-- CATEGORIES START -->
-              <h2 class="no-top-space">Phân Loại</h2>
+              <h2 class="no-top-space">Chuyến bay theo nơi đi</h2>
               <ul class="nav sidebar-categories margin-bottom-40">
-
-                <li><a href="#">London (18)</a></li>
+                {% for s in sanbay %}
+                <li><a href="/?san-bay={{s.id}}">{{s.DiaChi}}: {{count_flight(s.id)}}</a></li>
+                {% endfor %}
 
               </ul>
               <!-- CATEGORIES END -->
 
-              <!-- BEGIN RECENT NEWS -->                            
-              <h2>Chuyến Bay Mới</h2>
-              {% for flight in newest_flight %}
-              <div class="recent-news margin-bottom-10">
-              <div class="row margin-bottom-10">
-                  <div class="col-md-3">
-                  <img class="img-responsive" alt="" src="/static/images/ChuyenBay.jpg">                        
-                  </div>
-                  <div class="col-md-9 recent-news-inner">
-                  <h3><a href="">Chuyến bay từ {{flight.sanbay_di.DiaChi }} đến {{flight.sanbay_den.DiaChi }}</a></h3>
-                  <ul class="blog-info">
-                    <li><i class="fa fa-calendar"></i> {{ flight.ThoiGianXuatPhat }}</li>
-                    <li><i class="fa fa-comments"></i> {{ flight.ThoiGianBay }} phút</li>
-                    <li><i class="fa fa-tags"></i> {{ flight.maybay.Ten }}</li>
-                    </ul>
-                    <p>Đi từ sân bay {{ flight.sanbay_di.TenSB}} đến sân bay {{ flight.sanbay_den.TenSB}}</p>
-                    <p>Giá chỉ từ {{ flight.banggia.GiaVe }}</p>
-                  </div>                        
-              </div>
-              
-              </div>
-              {% endfor %}
-              <!-- END RECENT NEWS -->                            
+                                        
 
               <!-- BEGIN BLOG TALKS -->
               <div class="blog-talks margin-bottom-30">

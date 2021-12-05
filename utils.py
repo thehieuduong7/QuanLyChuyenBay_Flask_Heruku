@@ -220,6 +220,11 @@ def ve_da_mua(id):
 def get_all_ve():
     return Ve.query.join(ChuyenBay, Ve.Id_ChuyenBay==ChuyenBay.id).filter(ChuyenBay.ThoiGianXuatPhat.__gt__(datetime.now())).order_by(Ve.ThoiGianDatVe.desc()).all()
 
+def get_ve_nv(sdt=None, chuyen_bay=None):
+    ve = Ve.query
+    if sdt:
+        ve
+
 def paging_ve(ve, page):
     if ve:
         size = app.config["PAGE_SIZE"]
