@@ -6,6 +6,7 @@
     <div class="row margin-bottom-40">
       <!-- BEGIN CONTENT -->
       <div class="col-md-12 col-sm-12">
+        {%if ve %}
         <h1>Danh Sách Vé Đã Mua</h1>
         <div class="goods-page">
           <div class="goods-data clearfix">
@@ -17,47 +18,58 @@
                 <th class="goods-page-ref-no">Chuyến Bay</th>
                 <th class="goods-page-description">Hạng vé</th>
                 <th class="goods-page-price">Giá Vé</th>
-                <th class="goods-page-total" colspan="2">Thời gian khởi hành</th>
+                <th class="goods-page-ref-no">Thời gian khởi hành</th>
+                <th class="goods-page-ref-no">Thời gian đặt vé</th>
+
               </tr>
-              
+              {% for v in ve %}
               <tr>
                 <td class="goods-page-image">
-                  <a href="/doi-ve"><img src="{{ url_for('static', filename = 'styles/assets/frontend/pages/img/products/model4.jpg') }}" alt="Berry Lace Dress"></a>
+                  <btn><img src="{{ v.HinhAnh }}" alt="Ảnh đại diện"></btn>
                 </td>
                 <td class="goods-page-description">
-                  <h3><a href="#">Đầy đủ họ tên</a></h3>
-                  <p><strong>CMND :</strong> 123456</p>
-                  <em>More info is here</em>
+                  <h3><a href="#">{{ v.khachhang.HoTenKH }}</a></h3>
+                  <p><strong>CMND :</strong>{{ v.khachhang.CMND }}</p>
+                  <em>SDT: {{ v.khachhang.SDT }}</em>
                 </td>
                 <td class="goods-page-ref-no">
-                  Hà Nội - Hồ Chí Minh
+                  {{v.chuyenbay.sanbay_di.DiaChi}} - {{v.chuyenbay.sanbay_den.DiaChi}}
                 </td>
                 <td class="goods-page-quantity">
-                  <strong>Thường</strong>
+                  <strong>{{v.HangVe}}</strong>
                 </td>
                 <td class="goods-page-price">
-                  <strong><span>$</span>47.00</strong>
+                  
+                  {% for gia in v.chuyenbay.banggia %}
+                  {% if gia.HangVe == v.HangVe %}
+                    <strong><span>{{ gia.GiaVe }} VND</span></strong>
+                  {% endif %}
+                  {% endfor %}
                 </td>
-                <td class="goods-page-total">
-                  <strong>10:00AM</strong>
+                <td class="goods-page-ref-no">
+                  <strong>{{v.chuyenbay.ThoiGianXuatPhat}}</strong>
+                </td>
+                <td class="goods-page-ref-no">
+                  <strong>{{v.ThoiGianDatVe}}</strong>
                 </td>
                 <td class="del-goods-col">
-                  <a class="del-goods" href="/tra-ve">&nbsp;</a>
+                  <a class="btn btn-primary" href="/doi-tra-ve?ve={{v.id}}-{{v.khachhang.SDT}}-{{v.khachhang.id}}"><p class="text-white">Đổi</p></a>
+                </td>
+                <td class="del-goods-col">
+                  <button class="btn btn-primary" onclick="checkVe('{{v.id}}-{{v.khachhang.SDT}}-{{v.khachhang.id}}', 1, null, null)">Trả</button>
                 </td>
               </tr>
+              {% endfor %}
+              {% else %}
+              <tr class="goods-page-ref-no">
+                Bạn chưa mua vé nào!!
+              </tr>
+              {% endif %} 
             </table>
+            
             </div>
-
-            <hr class="blog-post-sep">
-              <ul class="pagination">
-              <li><a href="#">Prev</a></li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li class="active"><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li><a href="#">Next</a></li>
-              </ul>     
+  
+               
             <!-- <div class="shopping-total">
               <ul>
                 <li>
@@ -78,10 +90,14 @@
            <button class="btn btn-default" type="submit">Continue shopping <i class="fa fa-shopping-cart"></i></button>
           <button class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button> --> -->
         </div>
+        
       </div>
+      
       <!-- END CONTENT -->
     </div>
     <!-- END SIDEBAR & CONTENT -->
   </div>
 </div>
+<script>
+</script>
 {% endblock %}

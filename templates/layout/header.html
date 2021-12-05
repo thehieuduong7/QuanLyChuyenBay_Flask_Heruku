@@ -128,7 +128,8 @@
                 
               <ul class="dropdown-menu">
                 <li><a href="/list-ve">Danh Sách Vé</a></li>
-                <li><a href="/ban-ve">Bán Vé</a></li>               
+                <li><a href="/ban-ve">Bán Vé</a></li> 
+                <li><a href="/doi-tra-ve">Đổi trả vé</a></li>           
               </ul>
             </li>
             <li class="dropdown">
@@ -187,14 +188,15 @@
               </div> 
             </li>
             {% elif current_user.VaiTro == "A" %}
-            <li class = "active" ><a href="/">Home</a></li>
+            <li ><a href="/">Home</a></li>
             <li><a href="/admin" target="_blank">Admin</a></li>
             {% elif current_user.VaiTro == "K" %}
-            <li class = "active" ><a href="/">Home</a></li>
-            <li><a href="/info-ve">Vé Đã Mua</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/info-ve?id={{ current_user.id }}">Vé Đã Mua</a></li>
             <!-- END TOP SEARCH -->
             {% else %}
-            <li class = "active" ><a href="/">Home</a></li>
+            <li ><a href="/">Home</a></li>
+            <li><a href="/doi-tra-ve">Đổi trả vé</a></li>
             {% endif %}
           </ul>
         </div>

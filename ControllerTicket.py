@@ -52,7 +52,7 @@ class TicketController:
     def tongThanhToan(self,idChuyenBay,hangVe,soLuongDat):
         bangGia = BangGiaVe.query.filter_by(Id_ChuyenBay=idChuyenBay,
                                         HangVe=hangVe).first()
-        if(bangGia==None): return None;
+        if(bangGia==None): return None
         tongTien= bangGia.GiaVe * soLuongDat
         return tongTien
     def datVe(self,Id_ChuyenBay,HangVe,id_kh):
@@ -69,7 +69,7 @@ class TicketController:
                 return False
             
             name = veMayBay.khachhang.HoTenKH
-            id_ve=veMayBay.id
+            id_ve=veMayBay.id + '-' + veMayBay.khachhang.SDT + '-' + veMayBay.Id_KhachHang
             thoiGianDat= veMayBay.ThoiGianDatVe
             hangVe=veMayBay.HangVe
             

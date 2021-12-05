@@ -16,25 +16,36 @@ from ControllerNhapLich import NhapLichController
 def user_load(user_id):
     return NguoiDung.query.get(user_id)
 
+@app.context_processor
+def quick_func():
+    def count_flight(bid):
+        return utils.count_flight_by_san_bay(bid)
+    return dict(count_flight = count_flight)
+
 @app.route("/")
 def home():
     quy_dinh = utils.get_quydinh() 
     size = app.config["PAGE_SIZE"]
     index = request.args.get("page")
+    san_bay_di = utils.get_san_bay_by_id(request.args.get("san-bay"))
+    
     if index:
         index = int(index)
     else:
         index = 1
-    flights = utils.get_flight(noi_di=request.args.get("noidi"),
+    
+    if san_bay_di:
+        flights = utils.get_flight_by_san_bay(san_bay=san_bay_di)
+    else:
+        flights = utils.get_flight(noi_di=request.args.get("noidi"),
                                 noi_den=request.args.get("noiden"),
                                 time=request.args.get("time"))
+    
     count = utils.count_flights(flights)
     flights = utils.paging(flights, index)
-    
+
     newest_flight = utils.get_newest_flight()
     sanbay = utils.get_all_san_bay()
-    
-    ListBangGiaVe = BangGiaVeController().listBangGiaVe()
 
     return render_template("home.html", quy_dinh = quy_dinh,
                                         flights=flights,
@@ -44,7 +55,7 @@ def home():
                                         noi_di=request.args.get("noidi"),
                                         noi_den=request.args.get("noiden"),
                                         time = request.args.get("time"),
-                                        index = index,ListBangGiaVe=ListBangGiaVe)
+                                        index = index)
 
 @app.route("/login", methods=["POST"])
 def login_execute():
@@ -263,11 +274,7 @@ def list_khach():
     if current_user.VaiTro == "N":
         return render_template("list-khachhang.html")
 
-# Khách hàng's
-@app.route("/info-ve")
-def info_ve():
-    if current_user.VaiTro == "K":
-        return render_template("info-ve.html")
+
 @app.route("/dat-ve-online/<int:id_cb>/<hang>/<int:soluong>",methods=['Get','Post'])
 def dat_ve_online(id_cb,hang,soluong):
     if current_user.is_authenticated:
@@ -307,10 +314,73 @@ def dat_ve_online(id_cb,hang,soluong):
     return 'faile',403   
 
 # Khách hàng & Nhân viên
-@app.route("/doi-ve")
-def doi_ve():
-    if current_user.is_authenticated:
-        return render_template("doi-ve.html")
+@app.route("/info-ve")
+def info_ve():
+    if current_user.VaiTro == "K":
+        ve = utils.ve_da_mua(request.args.get("id"))
+        return render_template("info-ve.html", ve=ve)
+
+@app.route("/api/check-ve/<id_ve>", methods=['post'])
+def check_ve(id_ve):
+    ve = utils.get_ve(id_ve)
+    if ve:
+        if utils.check_ve(ve)==true:
+            return jsonify({
+                "error_code": 200
+            })
+    return jsonify({
+        "error_code": 404
+    })
+    #if current_user.is_authenticated:
+        #return render_template("doi-ve.html")
+@app.route("/doi-tra-ve")
+def doi_tra_ve():
+    sanbay = utils.get_all_san_bay()
+    noi_di=request.args.get("noidi")
+    noi_den=request.args.get("noiden")
+    time=request.args.get("time")
+    flights = None
+    if noi_den and noi_di and time:
+        flights = utils.get_flight(noi_di=noi_di,
+                                noi_den=noi_den,
+                                time=time)
+    return render_template("doi-tra-ve.html", sanbay=sanbay,
+                                            flights=flights,
+                                            ve=request.args.get("ve"))
+
+@app.route("/api/doi-ve/<id_ve>", methods=['put'])
+def doi_ve(id_ve):
+    ve = utils.get_ve(id_ve)
+    data = request.json
+    id_chuyen_bay = str(data['id_chuyen_bay'])
+    hang_ve = str(data['hang_ve'])
+    if utils.check_ve_moi(id_chuyen_bay=id_chuyen_bay, hang_ve=hang_ve)==true:
+        if utils.doi_ve(ve=ve, id_chuyen_bay=id_chuyen_bay, hang_ve=hang_ve)==true:
+            return jsonify({
+                "error_code": 200
+            })
+        return jsonify({
+            "error_code": 404
+        })
+    return jsonify({
+        "error_code": 500
+    })
+    #if current_user.is_authenticated:
+        #return render_template("doi-ve.html")
+
+@app.route("/api/tra-ve/<id_ve>", methods=['delete'])
+def tra_ve(id_ve):
+    #data = request.args.get('ve')
+    #data = request.json
+    #id_ve = str(data['id_ve'])
+    ve = utils.get_ve(id_ve)
+    if utils.xoa_ve(ve)==true:
+        return jsonify({
+            "error_code": 200
+        })
+    return jsonify({
+        "error_code": 400
+    })
 if __name__ == '__main__':
     with app.app_context():
         app.run(debug=True)

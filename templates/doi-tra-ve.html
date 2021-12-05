@@ -1,0 +1,123 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<div class="main">
+  <div class="container">
+    <ul class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/info-ve">Vé</a></li>
+        <li class="active">Đổi Vé</li>
+    </ul>
+    <!-- BEGIN SIDEBAR & CONTENT -->
+    <div class="row margin-bottom-40">
+      <!-- BEGIN SIDEBAR -->
+      <!-- <div class="sidebar col-md-3 col-sm-5"> -->
+      <!-- {% if current_user.VaiTro == "N" %}
+        <ul class="list-group margin-bottom-25 sidebar-menu">
+          <li class="list-group-item clearfix"><a href="/list-ve"><i class="fa fa-angle-right"></i> Danh sách vé</a></li>
+          <li class="list-group-item clearfix"><a href="/list-khach"><i class="fa fa-angle-right"></i> Danh sách khách hàng</a></li>
+          <li class="list-group-item clearfix"><a href="/"><i class="fa fa-angle-right"></i> Danh sách chuyến bay</a></li>
+        </ul>
+      {% elif current_user.VaiTro == "K" %}
+      <ul class="list-group margin-bottom-25 sidebar-menu">
+        <li class="list-group-item clearfix"><a href="/"><i class="fa fa-angle-right"></i> Tra Cứu Chuyến Bay</a></li>
+      </ul>
+      {% endif %} -->
+      <!-- <ul class="list-group margin-bottom-25 sidebar-menu">
+        <li class="list-group-item clearfix"><a href="/"><i class="fa fa-angle-right"></i> Tra Cứu Chuyến Bay</a></li>
+      </ul>
+      </div> -->
+      
+      <!-- END SIDEBAR -->
+
+      <!-- BEGIN CONTENT -->
+      <div class="col-md-12 col-sm-12">
+        <h1>Đổi Trả Vé</h1>
+        <form role="form" class="form-horizontal form-without-legend">
+        <div class="content-form-page">
+            <div class="input-group">
+              {% if ve %}
+              <input type="text" id="ve" name="ve" value= "{{ ve }}" placeholder="Nhập mã vé" class="form-control" required>
+              {% elif not ve %}
+              <input type="text" id="ve" name="ve" placeholder="Nhập mã vé" class="form-control" required>
+              {% endif %}
+              <span class="input-group-btn">
+                <button class="btn btn-primary" onclick="check(1)">Trả</button>
+              </span>
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12">
+          <h3 class = "text-center">Chọn chuyến bay</h3>
+              <div class="form-group col-md-3">
+                  <select class="form-control input-sm" name = "noidi">
+                    <option> --- Chọn nơi đi --- </option>
+                    {% for s in sanbay %}
+                    <option>{{ s.DiaChi }}</option>
+                    {% endfor %}
+                  </select>
+              </div>
+              <div class="form-group col-md-3">
+                  <select name = "noiden" class="form-control input-sm">
+                      <option> --- Chọn nơi đến --- </option>
+                      {% for s in sanbay %}
+                      <option>{{ s.DiaChi }}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+              <div class="form-group col-md-5">
+                  <label class="col-lg-4 control-label padding-left-0 padding-right-0">Thời Gian Xuất Phát: </label>
+                  <div class="col-lg-8">
+                      <input type="datetime-local" id="time" name = "time" class="form-control" required>
+                  </div>
+              </div>
+                  <button class="btn btn-primary" type="submit">Tìm Kiếm</button>
+                  <a  href="/doi-tra-ve" type="reset" class="btn btn-default">Nhập Lại</a>
+          </form>
+      </div>
+      {% if flights %}
+      {% for f in flights %}
+      <hr class="blog-post-sep">
+    <div class="row">
+        <div class="col-md-4 col-sm-4">
+            <img class="img-responsive" alt="" src="/static/images/ChuyenBay.jpg">
+        </div>
+        <div class="col-md-8 col-sm-8">
+            <h2><a>Chuyến bay từ {{ f.sanbay_di.DiaChi }} đến {{ f.sanbay_den.DiaChi }}</a></h2>
+            <ul class="blog-info">
+            <li><i class="fa fa-calendar"></i> {{ f.ThoiGianXuatPhat }}</li>
+            <li><i class="fa fa-comments"></i> {{ f.ThoiGianBay }} phút</li>
+            <li><i class="fa fa-tags"></i> {{ f.maybay.Ten }}</li>
+            </ul>
+            <p>Đi từ sân bay {{ f.sanbay_di.TenSB}} đến sân bay {{ f.sanbay_den.TenSB}} </p> 
+            {% for v in f.banggia %}
+            {% if v.HangVe == "Thường" %}
+            <p>| Giá chỉ từ {{ v.GiaVe }} VND</p>
+            {% endif %}
+            {% endfor %}
+            <div class="col-md-5 padding-left-0">
+              <select class="form-control" id="mySelect">
+                <option>------Chọn một hạng vé------</option>
+                {% for v in f.banggia %}
+                  <option>{{v.HangVe}}</option>
+                {% endfor %}
+              </select>
+          </div>
+          <button class="btn btn-primary" onclick="check(0, {{ f.id }})">Đổi vé</button>
+        </div>
+          <hr class="blog-post-sep">
+        {% endfor %}
+        {% endif %}
+      </div>
+      <!-- END CONTENT -->
+    </div>
+    <!-- END SIDEBAR & CONTENT -->
+  </div>
+</div>
+<script>
+  function check(action, id_chuyenBay){
+    //var ve = document.getElementById('ve').innerHTML;
+    var ve = $('#ve').val();
+    var hangVe = $('#mySelect').val();
+    checkVe(ve, action, id_chuyenBay, hangVe);
+  }
+</script>
+{% endblock %}
