@@ -136,6 +136,14 @@ class Ve(db.Model):
 if __name__ == '__main__':
     db.create_all()
 
+    admin = NguoiDung(TenDN='admin',MatKhau='1',VaiTro='A',TenNguoiDung='Admin')
+    nv = NguoiDung(TenDN='nhanvien',MatKhau='1',VaiTro='N',TenNguoiDung='nhanvien')
+    kh = NguoiDung(TenDN='khachhang',MatKhau='1',VaiTro='K',TenNguoiDung='khachhang')
+    
+    db.session.add(admin)
+    db.session.add(nv)
+    db.session.add(kh)
+    db.session.commit()
     #-------CHỈ CHẠY 1 LẦN--------
     
     #Các quy định mặc định 
