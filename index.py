@@ -154,13 +154,16 @@ def ban_ve(id_cb,hang,soluong):
         soluong=int(soluong)
         id_cb=int(id_cb)
         cb= ChuyenBay.query.get(id_cb)
+        veDAO = TicketController()
         if(request.method=='GET'):
             if(not cb): return 'không tìm thấy chuyến bay'
+            tongTien =veDAO.tongThanhToan(id_cb,hang,soluong)
             return render_template("banve.html",
-                    number_kh=soluong,chuyenBay=cb,hangVe=hang)
+                    number_kh=soluong,chuyenBay=cb,hangVe=hang,tongTien=tongTien)
         else:
             list_kh=[]
-            veDAO = TicketController()
+            tongTien =veDAO.tongThanhToan(id_cb,hang,soluong)
+
             for i in range(1,int(soluong)+1):
                 data_kh={}
                 data_kh['HoTenKH']=request.form.get('HoTenKH'+str(i))
@@ -181,7 +184,8 @@ def ban_ve(id_cb,hang,soluong):
                 contentMess=result
             cb= ChuyenBay.query.get(id_cb)
             return render_template("banve.html",
-                    number_kh=soluong,chuyenBay=cb,hangVe=hang,mess=mess,contentMess=contentMess)
+                    number_kh=soluong,chuyenBay=cb,hangVe=hang,mess=mess,contentMess=contentMess,
+                    tongTien=tongTien)
 
     return 'faile'
 
@@ -323,14 +327,17 @@ def dat_ve_online(id_cb,hang,soluong):
         soluong=int(soluong)
         id_cb=int(id_cb)
         cb= ChuyenBay.query.get(id_cb)
+        veDAO = TicketController()
         minDat = int(QuyDinhController().ThoiGianDatVeToiThieu().NoiDung)
         if(request.method=='GET'):
             if(not cb): return 'không tìm thấy chuyến bay'
+            tongTien =veDAO.tongThanhToan(id_cb,hang,soluong)
+
             return render_template("dat-ve-online.html",
-                number_kh=soluong,chuyenBay=cb,hangVe=hang,minDat=minDat)
+                number_kh=soluong,chuyenBay=cb,hangVe=hang,minDat=minDat,tongTien=tongTien)
         else:
+            tongTien =veDAO.tongThanhToan(id_cb,hang,soluong)
             list_kh=[]
-            veDAO = TicketController()
             for i in range(1,int(soluong)+1):
                 data_kh={}
                 data_kh['HoTenKH']=request.form.get('HoTenKH'+str(i))
@@ -352,7 +359,7 @@ def dat_ve_online(id_cb,hang,soluong):
             cb= ChuyenBay.query.get(id_cb)
             return render_template("dat-ve-online.html",
                     number_kh=soluong,chuyenBay=cb,hangVe=hang,mess=mess,contentMess=contentMess,
-                    minDat=minDat)
+                    minDat=minDat,tongTien=tongTien)
     return 'faile',403   
 
 # Khách hàng & Nhân viên
