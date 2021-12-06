@@ -8,20 +8,29 @@
       {%if ve %}
       <div class="col-md-12 col-sm-12">
         <h1>Danh Sách Vé</h1>
+        <div  class="form-horizontal form-without-legend">
+          <div class="col-lg-8">
+            {%if sdt%}
+              <input type="text" id="sdt" name = "sdt" value="{{sdt}}" class="form-control" placeholder="Nhập số điện thoại" required>
+            {%else%}
+            <input type="text" id="sdt" name = "sdt" class="form-control" placeholder="Nhập số điện thoại" required>
+            {%endif%}
+          </div>
+          
+
+        <a href="" onclick="this.href='/list-ve?'
+        +'sdt='+
+        document.getElementById('sdt').value              
+        "><button type="button" class="btn btn-primary">Tìm kiếm</button></a>
+        {% if msg %}
+        {{ msg }}
+     {%endif%}
+      </div>
+        
         <div class="goods-page">
           <div class="goods-data clearfix">
             <div class="table-wrapper-responsive">
-              <ul class="pagination">
-                {% if index>1 %}
-                    <li><a href="/list-ve?page={{index-1}}">Trước</a></li>
-                {% endif %}
-            {% for i in range(1, page_num+1) %}           
-              <li><a href="/list-ve?page={{i}}">{{i}}</a></li>
-            {% endfor %}
-            {% if page_num>index %}
-                <li><a href="/list-ve?page={{index+1}}">Sau</a></li>
-            {% endif %}
-              </ul>  
+              
               <table summary="Shopping cart">
                 <tr>
                   <th class="goods-page-image">Ảnh khách hàng</th>
@@ -71,6 +80,17 @@
                   </td>
                 </tr>
                 {% endfor %}
+                <ul class="pagination">
+                  {% if index>1 %}
+                      <li><a href="/list-ve?page={{index-1}}">Trước</a></li>
+                  {% endif %}
+              {% for i in range(1, page_num+1) %}           
+                <li><a href="/list-ve?page={{i}}">{{i}}</a></li>
+              {% endfor %}
+              {% if page_num>index %}
+                  <li><a href="/list-ve?page={{index+1}}">Sau</a></li>
+              {% endif %}
+                </ul>  
                 {% else %}
                 <tr class="goods-page-ref-no">
                   Bạn chưa mua vé nào!!

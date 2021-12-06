@@ -127,7 +127,15 @@ def normaluer_forget_password():
 @app.route("/list-ve")
 def list_ve():
     if current_user.VaiTro == "N":
-        ve = utils.get_all_ve()
+        ms = None
+        sdt = request.args.get("sdt")
+        if sdt:
+            ve = utils.get_ve_nv(sdt)
+            if not ve:
+                ve = utils.get_all_ve()
+                ms = "Không tìm thấy!"
+        else:
+            ve = utils.get_all_ve()
         index = request.args.get("page")
         if index:
             index = int(index)
@@ -138,6 +146,7 @@ def list_ve():
         return render_template("list-ve.html", ve=ve,
                                 index=index, 
                                 page_num=math.ceil(count/5), 
+                                msg = ms, sdt=sdt
                                 )
 @app.route("/ban-ve/<id_cb>/<hang>/<int:soluong>",methods=['Post','Get'])
 def ban_ve(id_cb,hang,soluong):
